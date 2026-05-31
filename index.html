@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Warunk Arsi - VVIP Member Portal</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -23,15 +23,43 @@
     </div>
 
     <header class="bg-emerald-700 text-white shadow-md sticky top-[30px] z-[60]">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <img id="app-logo" src="https://img.icons8.com/color/96/store-front.png" class="w-8 h-8 object-contain rounded-full bg-white p-0.5" alt="Logo">
-                <span class="font-bold text-lg tracking-wide">WARUNK ARSI MEMBER</span>
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center relative w-full">
+            
+            <div class="flex items-center space-x-3 flex-shrink-0">
+                <img id="app-logo" src="https://img.icons8.com/color/96/store-front.png" class="w-8 h-8 object-cover rounded-full bg-white p-0.5" alt="Logo">
+                <span class="font-bold text-base md:text-lg tracking-wide whitespace-nowrap">WARUNK ARSI MEMBER</span>
+            </div>
+
+            <div id="header-search-wrapper" class="hidden flex-1 flex justify-end items-center ml-4">
+                
+                <div class="hidden sm:relative sm:block w-full sm:max-w-xs md:max-w-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass text-emerald-300 text-sm"></i>
+                    </div>
+                    <input type="text" id="search-menu-desktop" oninput="filterMenu('desktop')" placeholder="Cari menu favorit Kakak..." class="w-full bg-emerald-800/60 text-white placeholder-emerald-200 text-xs md:text-sm rounded-full pl-9 pr-4 py-2 outline-none border border-emerald-600/50 transition-all focus:bg-emerald-900 focus:border-amber-400" />
+                </div>
+
+                <button onclick="toggleMobileSearch()" class="block sm:hidden text-lg p-1 text-emerald-100 hover:text-white transition focus:outline-none translate-x-1" id="mobile-search-trigger">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <div id="mobile-search-bar" class="hidden border-t border-emerald-800 bg-emerald-800 px-4 py-2.5 sm:hidden">
+            <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-emerald-300 text-sm"></i>
+                </div>
+                <input type="text" id="search-menu-mobile" oninput="filterMenu('mobile')" placeholder="Cari menu favorit Kakak..." class="w-full bg-emerald-900 text-white placeholder-emerald-300 text-sm rounded-full pl-9 pr-9 py-2 outline-none border border-emerald-600 focus:border-amber-400" />
+                <button onclick="toggleMobileSearch()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-emerald-300 hover:text-white text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto p-4 sm:p-6 pb-32">
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 pb-32">
         
         <div id="member-login" class="max-w-md mx-auto bg-white rounded-3xl shadow-sm border p-8 mt-10 space-y-6">
             <div class="text-center space-y-2">
@@ -42,8 +70,8 @@
                 <p class="text-sm text-gray-500">Masukkan nomor WhatsApp terdaftar Anda</p>
             </div>
             <div class="space-y-3">
-                <input type="text" id="member-wa-input" placeholder="Contoh: 08123456789" class="w-full border rounded-2xl px-4 py-3 text-center text-lg focus:outline-emerald-600">
-                <button onclick="checkMemberStatus()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl transition">Masuk ke Dashboard</button>
+                <input type="text" id="member-wa-input" placeholder="Contoh: 08123456789" class="w-full border rounded-2xl px-4 py-3 text-center text-lg focus:outline-emerald-600 bg-white" />
+                <button onclick="checkMemberStatus()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl transition shadow-sm">Masuk ke Dashboard</button>
             </div>
             <div class="border-t pt-4 text-center">
                 <p class="text-xs text-gray-400 mb-2">Belum jadi VVIP Member?</p>
@@ -56,60 +84,64 @@
             <div class="space-y-3 text-sm">
                 <div>
                     <label class="block text-gray-600 mb-1">Nama Lengkap</label>
-                    <input type="text" id="reg-name" class="w-full border rounded-xl px-3 py-2.5 focus:outline-emerald-600">
+                    <input type="text" id="reg-name" class="w-full border rounded-xl px-3 py-2.5 focus:outline-emerald-600 bg-white" />
                 </div>
                 <div>
                     <label class="block text-gray-600 mb-1">No. WhatsApp</label>
-                    <input type="text" id="reg-wa" placeholder="08xxxx" class="w-full border rounded-xl px-3 py-2.5 focus:outline-emerald-600">
+                    <input type="text" id="reg-wa" placeholder="08xxxx" class="w-full border rounded-xl px-3 py-2.5 focus:outline-emerald-600 bg-white" />
                 </div>
-                <button onclick="registerNewMember()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition">Simpan & Daftar</button>
+                <button onclick="registerNewMember()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition shadow-sm">Simpan & Daftar</button>
                 <button onclick="toggleRegisterForm(false)" class="w-full text-gray-500 text-xs py-1 text-center block hover:underline">Kembali</button>
             </div>
         </div>
 
-        <div id="member-dashboard" class="hidden">
+        <div id="member-dashboard" class="hidden space-y-6">
             
-            <div class="sticky top-[80px] z-50 bg-gray-50 pt-4 pb-4 border-b border-gray-100 shadow-sm -mx-4 px-4 sm:mx-0 sm:px-0 sm:rounded-b-3xl sm:border-x sm:shadow-md mb-6">
-                
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-                    <div class="lg:col-span-2 space-y-4">
-                        <div class="bg-gradient-to-br from-emerald-600 to-teal-800 text-white p-5 rounded-3xl shadow-md space-y-4">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="text-[10px] text-emerald-200 uppercase tracking-widest font-bold">VVIP Membership</p>
-                                    <h3 id="dash-name" class="text-lg font-bold mt-1">-</h3>
-                                </div>
-                                <span class="bg-emerald-500/30 border border-emerald-400/40 text-emerald-100 text-[10px] px-2.5 py-1 rounded-full font-bold">Warunk Arsi</span>
+            <div class="bg-white p-4 sm:p-6 rounded-3xl border border-gray-100 shadow-sm">
+                <div class="flex flex-col lg:flex-row gap-6">
+                    
+                    <div class="w-full lg:w-5/12 bg-gradient-to-br from-emerald-600 to-teal-800 text-white p-5 rounded-3xl shadow-md flex flex-col justify-between min-h-[170px]">
+                        <div class="flex justify-between items-start">
+                          <div>
+                            <p class="text-[10px] text-emerald-200 uppercase tracking-widest font-bold">VVIP Membership</p>
+                            <h3 id="dash-name" class="text-lg font-bold mt-1">-</h3>
+                          </div>
+                          <span class="bg-emerald-500/30 border border-emerald-400/40 text-emerald-100 text-[10px] px-2.5 py-1 rounded-full font-bold">Warunk Arsi</span>
+                        </div>
+                        <div class="pt-2 flex justify-between items-end">
+                          <div>
+                            <p class="text-[9px] text-emerald-200 uppercase">Total Poin Loyalitas</p>
+                            <p class="text-3xl font-black text-amber-300" id="dash-poin">0 <span class="text-xs font-normal text-white">Poin</span></p>
+                          </div>
+                          <p class="text-xs font-mono tracking-wider text-emerald-200 text-[10px]" id="dash-id">ID: -</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 w-full flex flex-col justify-between gap-4">
+                        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex-1 flex flex-col justify-between min-h-[110px]">
+                            <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
+                                <span class="text-xs font-extrabold text-gray-700 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i> Riwayat Pesanan Anda (Klik untuk Detail)
+                                </span>
+                                <span class="text-[9px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Real-time</span>
                             </div>
-                            <div class="pt-2 flex justify-between items-end">
-                                <div>
-                                    <p class="text-[9px] text-emerald-200 uppercase">Total Poin Loyalitas</p>
-                                    <p class="text-3xl font-black text-amber-300" id="dash-poin">0 <span class="text-xs font-normal text-white">Poin</span></p>
-                                </div>
-                                <p class="text-xs font-mono tracking-wider text-emerald-200 text-[10px]" id="dash-id">ID: -</p>
+                            <div id="live-order-status-container" class="text-xs font-medium text-gray-500 space-y-2 flex-1 flex flex-col justify-start overflow-y-auto max-h-[120px]">
+                                <p class="italic text-gray-400 text-center text-[11px] py-2">Belum ada aktivitas transaksi atau penukaran poin saat ini.</p>
                             </div>
                         </div>
 
-                        <div class="flex gap-3">
-                            <button onclick="openRewardModal()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-amber-950 font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2 text-sm shadow-sm border border-amber-400">
+                        <div class="flex gap-3 w-full flex-shrink-0">
+                            <button onclick="openRewardModal()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-amber-950 font-bold py-3.5 rounded-2xl transition flex items-center justify-center gap-2 text-sm shadow-sm border border-amber-400">
                                 <i class="fa-solid fa-gift"></i> Tukar Poin
                             </button>
-                            <button onclick="location.reload()" class="w-28 text-center text-xs text-red-500 font-bold border border-red-200 py-3 rounded-2xl hover:bg-red-50 transition">Keluar</button>
+                            <button onclick="location.reload()" class="w-24 text-center text-xs text-red-500 font-bold border border-red-200 py-3.5 rounded-2xl hover:bg-red-50 transition bg-white">Keluar</button>
                         </div>
                     </div>
 
-                    <div class="lg:col-span-2 flex items-end">
-                        <div class="relative w-full shadow-sm rounded-full bg-white border border-gray-200">
-                            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                                <i class="fa-solid fa-magnifying-glass text-gray-400 text-lg"></i>
-                            </div>
-                            <input type="text" id="search-menu-input" oninput="filterMenu()" placeholder="Cari menu favorit Kakak..." class="bg-transparent text-gray-800 text-sm md:text-base rounded-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-14 py-3.5 outline-none transition-shadow">
-                        </div>
-                    </div>
                 </div>
             </div>
             
-            <div class="max-w-7xl mx-auto space-y-10 lg:pl-0">
+            <div class="max-w-7xl mx-auto space-y-10">
                 
                 <div id="flash-sale-section" class="space-y-4 hidden relative">
                     <div class="flex justify-between items-center px-1">
@@ -162,13 +194,28 @@
                 </h4>
                 <button onclick="closeRewardModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-amber-600/30 text-amber-950 text-xl font-bold hover:bg-amber-600/50">×</button>
             </div>
-            
             <div class="p-5 space-y-3 text-sm max-h-[60vh] overflow-y-auto" id="reward-modal-content">
                 <p class="text-gray-400 text-center py-2">Memuat katalog hadiah...</p>
             </div>
-
             <div class="p-4 bg-gray-50 border-t text-center">
                 <p class="text-xs text-gray-500">Poin Kakak akan dipotong otomatis jika penukaran hadiah berhasil.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="order-detail-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl w-full max-w-sm shadow-xl border modal-animate-in overflow-hidden">
+            <div class="bg-emerald-700 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span class="font-bold text-sm" id="modal-order-id">Detail Transaksi</span>
+                </div>
+                <button onclick="closeOrderDetailModal()" class="text-white text-xl font-bold hover:text-gray-200">×</button>
+            </div>
+            <div class="p-5 space-y-4 text-xs" id="modal-order-content">
+                </div>
+            <div class="p-4 bg-gray-50 border-t text-center">
+                <p class="text-[10px] text-gray-400">Terima kasih telah setia menjadi VVIP Member Warunk Arsi</p>
             </div>
         </div>
     </div>
@@ -181,6 +228,7 @@
         let memberCart = [];
         let activeMember = null;
         let cloudMenu = [];
+        let currentOrdersCache = []; // Untuk simpan riwayat order aktif
 
         async function streamTokoSettings() {
             const { data } = await _supabase.from('toko_settings').select('*').eq('id', 1).single();
@@ -188,6 +236,117 @@
                 document.getElementById('running-text').innerText = data.pengumuman;
                 document.getElementById('app-logo').src = data.logo_url;
             }
+        }
+
+        function toggleMobileSearch() {
+            const mobileSearchContainer = document.getElementById('mobile-search-bar');
+            mobileSearchContainer.classList.toggle('hidden');
+            if (!mobileSearchContainer.classList.contains('hidden')) {
+                document.getElementById('search-menu-mobile').focus();
+            } else {
+                document.getElementById('search-menu-mobile').value = '';
+                renderMenuUI(); 
+            }
+        }
+
+        // AMBIL RIWAYAT TRANSAKSI DAN SINKRONKAN WARNA STATUS SEPERTI DI GAMBAR ADMIN KASIR
+        async function streamLiveOrders() {
+            if(!activeMember) return;
+            
+            const { data, error } = await _supabase.from('orders')
+                .select('*')
+                .eq('member_id', activeMember.id)
+                .order('id', { ascending: false })
+                .limit(5); // Ambil sampai 5 transaksi terakhir
+
+            const container = document.getElementById('live-order-status-container');
+            if(!container) return;
+
+            if(error || !data || data.length === 0) {
+                container.innerHTML = `<p class="italic text-gray-400 text-center text-[11px] py-2">Belum ada riwayat transaksi terdeteksi, Kak.</p>`;
+                return;
+            }
+
+            currentOrdersCache = data; // Simpan ke cache agar bisa dibuka detailnya
+
+            container.innerHTML = data.map((ord, index) => {
+                // Warna Badge menyesuaikan dengan status kasir lo di gambar admin
+                let badgeColor = "bg-blue-100 text-blue-800 border-blue-200"; // Default Antrean
+                if(ord.status === 'Antrean') badgeColor = "bg-blue-50 text-blue-700 border-blue-200";
+                if(ord.status === 'Diproses') badgeColor = "bg-amber-100 text-amber-800 border-amber-200 animate-pulse";
+                if(ord.status === 'Selesai') badgeColor = "bg-emerald-100 text-emerald-800 border-emerald-200";
+                if(ord.status === 'Batal') badgeColor = "bg-red-100 text-red-800 border-red-200";
+
+                return `
+                    <div onclick="openOrderDetailModal(${index})" class="flex justify-between items-center text-[11px] bg-white border border-gray-200 hover:border-emerald-500 p-2.5 rounded-xl shadow-xs cursor-pointer transition transform hover:scale-[1.01]">
+                        <div class="truncate max-w-[170px] sm:max-w-[240px]">
+                            <div class="flex items-center gap-1">
+                                <span class="font-bold text-gray-800">${ord.order_id}</span>
+                                <span class="text-[9px] text-gray-400">| Rp ${ord.total_harga.toLocaleString('id-ID')}</span>
+                            </div>
+                            <p class="text-[9px] text-gray-400 mt-0.5">${ord.created_at ? new Date(ord.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit'}) : 'Baru Saja'}</p>
+                        </div>
+                        <span class="${badgeColor} text-[9px] px-2.5 py-0.5 border rounded-full font-bold uppercase tracking-wider">${ord.status}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // FUNGSI POPUP DETAIL ITEM YANG DIBELI (SAMA SEPERTI DI APLIKASI ADMIN KASIR)
+        function openOrderDetailModal(index) {
+            const order = currentOrdersCache[index];
+            if(!order) return;
+
+            document.getElementById('modal-order-id').innerText = `Detail Pesanan: ${order.order_id}`;
+            
+            let itemDetailsHtml = '';
+            if (Array.isArray(order.detail_items)) {
+                itemDetailsHtml = order.detail_items.map(item => `
+                    <div class="flex justify-between items-center py-1.5 border-b border-gray-100">
+                        <div>
+                            <p class="font-bold text-gray-800">${item.nama}</p>
+                            <p class="text-[10px] text-gray-400">${item.qty} x Rp ${item.harga.toLocaleString('id-ID')}</p>
+                        </div>
+                        <span class="font-bold text-gray-700">Rp ${(item.qty * item.harga).toLocaleString('id-ID')}</span>
+                    </div>
+                `).join('');
+            } else {
+                itemDetailsHtml = `<p class="italic text-gray-400 py-1">Detail menu tidak dapat dimuat.</p>`;
+            }
+
+            let statusBadgeColor = "bg-blue-100 text-blue-800";
+            if(order.status === 'Diproses') statusBadgeColor = "bg-amber-100 text-amber-800";
+            if(order.status === 'Selesai') statusBadgeColor = "bg-emerald-100 text-emerald-800";
+            if(order.status === 'Batal') statusBadgeColor = "bg-red-100 text-red-800";
+
+            const modalContent = document.getElementById('modal-order-content');
+            modalContent.innerHTML = `
+                <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Status Pesanan</p>
+                        <p class="font-bold text-gray-700 mt-0.5">${order.status}</p>
+                    </div>
+                    <span class="${statusBadgeColor} px-3 py-1 rounded-full font-bold uppercase tracking-wide text-[9px]">${order.status}</span>
+                </div>
+                <div>
+                    <p class="font-bold text-gray-500 mb-1 tracking-wide uppercase text-[10px]">Daftar Menu:</p>
+                    <div class="max-h-[150px] overflow-y-auto pr-1">
+                        ${itemDetailsHtml}
+                    </div>
+                </div>
+                <div class="pt-2 flex justify-between items-center text-sm font-black text-gray-800">
+                    <span>TOTAL PEMBAYARAN:</span>
+                    <span class="text-emerald-700 text-base">Rp ${order.total_harga.toLocaleString('id-ID')}</span>
+                </div>
+            `;
+
+            document.getElementById('order-detail-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOrderDetailModal() {
+            document.getElementById('order-detail-modal').classList.add('hidden');
+            document.body.style.overflow = '';
         }
 
         function toggleRegisterForm(show) {
@@ -215,12 +374,14 @@
             
             updateMemberUI(data);
             await syncMenuFromCloud();
+            await streamLiveOrders();
         }
 
         function updateMemberUI(memberData) {
             activeMember = memberData;
             document.getElementById('member-login').classList.add('hidden');
             document.getElementById('member-dashboard').classList.remove('hidden');
+            document.getElementById('header-search-wrapper').classList.remove('hidden'); 
             document.getElementById('dash-name').innerText = activeMember.nama;
             document.getElementById('dash-poin').innerHTML = `${activeMember.poin} <span class="text-xs font-normal text-white">Poin</span>`;
             document.getElementById('dash-id').innerText = `ID: ${activeMember.id}`;
@@ -235,7 +396,7 @@
             }
         }
 
-        function filterMenu() {
+        function filterMenu(source) {
             renderMenuUI();
         }
 
@@ -257,7 +418,6 @@
         }
 
         function renderMenuUI(onlyReward = false) {
-            // FILTER UTK KATALOG REWARD: Hanya tampilkan jika butuh_poin > 0 DAN is_tersedia bernilai TRUE
             const rewardMenus = cloudMenu.filter(item => item.butuh_poin > 0 && item.is_tersedia === true);
             const rewardModalContent = document.getElementById('reward-modal-content');
             
@@ -280,13 +440,12 @@
 
             if(onlyReward) return; 
 
-            const searchInput = document.getElementById('search-menu-input');
-            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            const searchDesktop = document.getElementById('search-menu-desktop') ? document.getElementById('search-menu-desktop').value.toLowerCase() : '';
+            const searchMobile = document.getElementById('search-menu-mobile') ? document.getElementById('search-menu-mobile').value.toLowerCase() : '';
+            const searchTerm = searchMobile || searchDesktop;
 
-            // FILTER UTAMA: Hanya ambil menu yang is_tersedia === true (Stok Ready)
             const availableMenu = cloudMenu.filter(item => item.is_tersedia === true);
 
-            // FILTER KEDUA: Jalankan pencarian kata kunci pada menu yang tersedia
             const filteredMenu = availableMenu.filter(item => 
                 item.nama.toLowerCase().includes(searchTerm) || 
                 item.kategori.toLowerCase().includes(searchTerm)
@@ -303,7 +462,7 @@
             } else {
                 fsSection.classList.remove('hidden');
                 fsContainer.innerHTML = flashSaleItems.map(item => {
-                    const imgFix = item.gambar_url || "https://img.icons8.com/illustrations/kolor/96/fast-food.png";
+                    const imgFix = item.gambar_url || "https://placehold.co/400x400/ecfdf5/065f46?text=Warunk+Arsi";
                     const hargaFinal = item.harga_flash_sale;
                     return `
                         <div class="bg-white rounded-3xl border border-red-100 shadow-sm overflow-hidden flex flex-row w-[320px] flex-shrink-0" id="item-fs-${item.id}">
@@ -336,7 +495,7 @@
                 normalMenuContainer.innerHTML = `<p class="text-gray-400 text-sm col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 text-center py-10">Maaf Kak, menu tidak ditemukan atau sedang habis.</p>`;
             } else {
                 normalMenuContainer.innerHTML = normalMenuItems.map(item => {
-                    const imgFix = item.gambar_url || "https://img.icons8.com/illustrations/kolor/96/fast-food.png";
+                    const imgFix = item.gambar_url || "https://placehold.co/400x400/ecfdf5/065f46?text=Warunk+Arsi";
                     const hargaFinal = item.harga_normal;
                     return `
                         <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col relative" id="item-norm-${item.id}">
@@ -408,7 +567,6 @@
             if(totalItems > 0) {
                 qtyBadge.innerText = totalItems;
                 totalLabel.innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
-                
                 if(stickyBar.classList.contains('hidden')) {
                     stickyBar.classList.remove('hidden'); 
                 }
@@ -419,17 +577,14 @@
 
         async function claimRewardMenu(menuNama, biayaPoin) {
             if (activeMember.poin < biayaPoin) {
-                alert(`Maaf, poin Kakak tidak mencukupi! Anda memerlukan ${biayaPoin} poin, sementara poin Anda saat ini hanya ${activeMember.poin} poin.`);
+                alert(`Maaf, poin Kakak tidak mencukupi!`);
                 return;
             }
-
             if (!confirm(`Yakin ingin menukarkan ${biayaPoin} poin dengan 1 ${menuNama}?`)) return;
 
             closeRewardModal();
-
             const poinBaru = activeMember.poin - biayaPoin;
             const { error: errPoin } = await _supabase.from('members').update({ poin: poinBaru }).eq('id', activeMember.id);
-            
             if(errPoin) { alert('Gagal memproses penukaran poin.'); return; }
 
             const orderId = 'REWARD-' + Math.floor(1000 + Math.random() * 9000);
@@ -445,10 +600,10 @@
                 status: 'Antrean'
             }]);
 
-            alert(`Sukses! ${biayaPoin} Poin berhasil dipotong. Menu reward gratisan Kakak sudah dikirim ke antrean Kasir!`);
-            
+            alert(`Sukses! ${biayaPoin} Poin dipotong. Menu reward gratisan Kakak sudah dikirim ke antrean Kasir!`);
             activeMember.poin = poinBaru;
             document.getElementById('dash-poin').innerHTML = `${poinBaru} <span class="text-xs font-normal text-white">Poin</span>`;
+            await streamLiveOrders();
         }
 
         async function submitOrderToCloud() {
@@ -471,6 +626,7 @@
             memberCart = [];
             renderCart();
             renderMenuUI(); 
+            await streamLiveOrders();
         }
 
         async function registerNewMember() {
@@ -482,6 +638,7 @@
             alert('Pendaftaran Sukses! Silakan Login.');
             toggleRegisterForm(false);
             document.getElementById('member-wa-input').value = wa;
+            checkMemberStatus();
         }
 
         window.onload = () => { 
@@ -495,6 +652,7 @@
                             document.getElementById('dash-poin').innerHTML = `${data.poin} <span class="text-xs font-normal text-white">Poin</span>`;
                         }
                     });
+                    streamLiveOrders();
                 }
             }, 15000); 
         };
