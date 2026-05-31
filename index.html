@@ -33,7 +33,7 @@
     <header class="bg-emerald-700 text-white shadow-md sticky top-[30px] z-[60]">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center relative w-full">
             
-            <!-- Branding Area (Kiri) -->
+            <!-- Branding Area -->
             <div class="flex items-center space-x-3 flex-shrink-0">
                 <img id="app-logo" src="https://img.icons8.com/color/96/store-front.png" class="w-8 h-8 object-cover rounded-full bg-white p-0.5" alt="Logo">
                 <span class="font-bold text-base md:text-lg tracking-wide whitespace-nowrap">WARUNK ARSI MEMBER</span>
@@ -41,7 +41,6 @@
 
             <!-- RESPONSIVE SEARCH COMPONENT -->
             <div id="header-search-wrapper" class="hidden flex-1 flex justify-end items-center ml-4">
-                
                 <!-- Versi Desktop -->
                 <div class="hidden sm:relative sm:block w-full sm:max-w-xs md:max-w-sm">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -49,7 +48,6 @@
                     </div>
                     <input type="text" id="search-menu-desktop" oninput="filterMenu('desktop')" placeholder="Cari menu favorit Kakak..." class="w-full bg-emerald-800/60 text-white placeholder-emerald-200 text-xs md:text-sm rounded-full pl-9 pr-4 py-2 outline-none border border-emerald-600/50 transition-all focus:bg-emerald-900 focus:border-amber-400" />
                 </div>
-
                 <!-- Versi Mobile -->
                 <button onclick="toggleMobileSearch()" class="block sm:hidden text-lg p-1 text-emerald-100 hover:text-white transition focus:outline-none translate-x-1" id="mobile-search-trigger">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -93,7 +91,7 @@
             </div>
         </div>
 
-        <!-- FORM REGISTRASI MEMBER BARU -->
+        <!-- FORM REGISTRASI -->
         <div id="member-register" class="max-w-md mx-auto bg-white rounded-3xl shadow-sm border p-8 mt-10 space-y-4 hidden">
             <h3 class="text-lg font-bold text-center">Pendaftaran Member VVIP</h3>
             <div class="space-y-3 text-sm">
@@ -112,10 +110,8 @@
 
         <!-- DASHBOARD HUB -->
         <div id="member-dashboard" class="hidden space-y-6">
-            
             <div class="bg-white p-4 sm:p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div class="flex flex-col lg:flex-row gap-6">
-                    
                     <!-- Kartu Membership VVIP -->
                     <div class="w-full lg:w-5/12 bg-gradient-to-br from-emerald-600 to-teal-800 text-white p-5 rounded-3xl shadow-md flex flex-col justify-between min-h-[170px]">
                         <div class="flex justify-between items-start">
@@ -134,7 +130,7 @@
                         </div>
                     </div>
 
-                    <!-- Kanan: Widget Status Real-time & Riwayat Transaksi -->
+                    <!-- Kanan: Widget Status Real-time -->
                     <div class="flex-1 w-full flex flex-col justify-between gap-4">
                         <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex-1 flex flex-col justify-between min-h-[110px]">
                             <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
@@ -156,27 +152,22 @@
                             <button onclick="location.reload()" class="w-24 text-center text-xs text-red-500 font-bold border border-red-200 py-3.5 rounded-2xl hover:bg-red-50 transition bg-white">Keluar</button>
                         </div>
                     </div>
-
                 </div>
             </div>
             
-            <!-- LIST SECTION PRODUK UTAMA -->
+            <!-- LIST SECTION PRODUK -->
             <div class="max-w-7xl mx-auto space-y-10">
-                
-                <!-- Area Flash Sale Resto -->
+                <!-- Area Flash Sale -->
                 <div id="flash-sale-section" class="space-y-4 hidden relative">
                     <div class="flex justify-between items-center px-1">
                         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
                             <i class="fa-solid fa-bolt text-red-500 text-xl"></i> 🔥 FLASH SALE (Terbatas!)
                         </h3>
-                        <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100 shadow-sm">
-                            <i class="fa-solid fa-arrow-right text-sm"></i>
-                        </div>
                     </div>
                     <div class="flex overflow-x-auto gap-4 pb-4 -mb-4 px-1" id="flash-sale-container"></div>
                 </div>
 
-                <!-- Area Grid Menu Utama Order Mandiri -->
+                <!-- Area Grid Menu Utama -->
                 <div class="space-y-4 px-1">
                     <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
                         <i class="fa-solid fa-utensils text-emerald-600"></i> Pilih Menu Order Mandiri
@@ -185,17 +176,14 @@
                         <p class="text-gray-400 text-sm col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 text-center py-4">Memuat menu utama...</p>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
 
-    <!-- COMPLIANT FOOTER COMPONENT (FIX FIXED REAL-TIME LOGO SINKRON & LINK SOSMED) -->
+    <!-- COMPLIANT FOOTER COMPONENT -->
     <footer class="bg-emerald-950 text-gray-300 text-xs border-t-2 border-emerald-800 mt-16 relative z-50">
         <div class="max-w-6xl mx-auto px-6 py-10">
             <div class="block-table">
-                
-                <!-- Kolom 1: Profil & Deskripsi (Fokus Topik Sarapan Pagi Bekasi Lengkap) -->
                 <div class="block-cell mobile-block pr-6" style="width: 40%;">
                     <div class="flex items-center gap-2.5 mb-3">
                         <img id="footer-logo" src="https://img.icons8.com/color/96/store-front.png" class="w-8 h-8 object-cover bg-white rounded-full p-0.5" alt="Footer Logo">
@@ -208,23 +196,15 @@
                         <i class="fa-solid fa-location-dot text-amber-400 mr-1"></i> Jl. Mawar IV No. 35, Rawa Bambu - Bekasi
                     </p>
                 </div>
-
-                <!-- Kolom 2: Jam Operasional Resto -->
                 <div class="block-cell mobile-block px-4" style="width: 30%;">
-                    <h4 class="font-bold text-white uppercase tracking-wider text-[11px] mb-3 pb-1 border-b border-emerald-800">
-                        Jam Operasional
-                    </h4>
+                    <h4 class="font-bold text-white uppercase tracking-wider text-[11px] mb-3 pb-1 border-b border-emerald-800">Jam Operasional</h4>
                     <ul class="space-y-2 text-[11px] text-gray-400">
                         <li><span class="text-emerald-400 font-bold">Selasa - Minggu:</span><br>06:00 WIB - Selesai</li>
                         <li><span class="text-red-400 font-bold">Hari Senin:</span><br><span class="bg-red-950/50 text-red-300 border border-red-900/40 px-1.5 py-0.5 rounded text-[10px]">Toko LIBUR / Tutup</span></li>
                     </ul>
                 </div>
-
-                <!-- Kolom 3: Navigasi Cepat & Media Sosial Ter-link Asli -->
                 <div class="block-cell mobile-block pl-6" style="width: 30%;">
-                    <h4 class="font-bold text-white uppercase tracking-wider text-[11px] mb-3 pb-1 border-b border-emerald-800">
-                        Informasi & Kontak
-                    </h4>
+                    <h4 class="font-bold text-white uppercase tracking-wider text-[11px] mb-3 pb-1 border-b border-emerald-800">Informasi & Kontak</h4>
                     <div class="space-y-2.5 mb-4">
                         <a href="#" class="block text-gray-400 hover:text-amber-400 transition text-[11px]"><i class="fa-solid fa-chevron-right text-[8px] text-emerald-500 mr-1"></i> Syarat & Ketentuan Member</a>
                         <a href="#" class="block text-gray-400 hover:text-amber-400 transition text-[11px]"><i class="fa-solid fa-chevron-right text-[8px] text-emerald-500 mr-1"></i> Kebijakan Privasi Portal</a>
@@ -235,32 +215,39 @@
                         <a href="https://www.tiktok.com/@warunkarsi" target="_blank" class="w-7 h-7 bg-emerald-900 text-white hover:bg-amber-500 hover:text-amber-950 rounded-full flex items-center justify-center text-xs transition shadow-sm"><i class="fa-brands fa-tiktok"></i></a>
                     </div>
                 </div>
-
             </div>
         </div>
-
-        <!-- COPYRIGHT BOTTOM SUB-BAR -->
         <div class="bg-emerald-980 text-center py-3 text-[10px] text-gray-500 border-t border-emerald-900/60">
             <p>&copy; 2026 <span class="text-emerald-400 font-bold">Warunk Arsi</span>. All Rights Reserved. Dev VVIP System Portal.</p>
         </div>
     </footer>
 
-    <!-- BAR ANTRIAN KASIR (STICKY BOTTOM BAR) -->
+    <!-- STICKY ORDER BAR (DENGAN BARIS INPUT CATATAN BARU SEBELUM TOMBOL KIRIM) -->
     <div id="sticky-order-bar" class="fixed bottom-0 left-0 right-0 z-[70] px-3 pb-3 pt-2 bg-gradient-to-t from-white/95 to-white/0 hidden pointer-events-none">
-        <div class="max-w-md mx-auto flex items-center justify-between bg-emerald-800 text-white p-4 rounded-3xl shadow-xl slide-up border border-emerald-700 pointer-events-auto">
-            <div class="flex items-center gap-4">
-                <div class="relative">
-                    <i class="fa-solid fa-basket-shopping text-2xl"></i>
-                    <span id="bottom-bar-qty-badge" class="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-emerald-800">0</span>
-                </div>
-                <div>
-                    <p class="font-bold text-sm tracking-tight">Kirim Order ke Kasir</p>
-                    <p id="bottom-bar-total" class="text-xs text-emerald-200 font-medium">Rp 0</p>
-                </div>
+        <div class="max-w-md mx-auto flex flex-col gap-2 pointer-events-auto">
+            
+            <!-- Tambahan Kolom Catatan Request Mandiri -->
+            <div class="w-full bg-white/95 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-md border border-gray-200 flex items-center gap-2">
+                <i class="fa-solid fa-pen-to-square text-emerald-700 text-sm"></i>
+                <input type="text" id="order-note-input" placeholder="Tambah catatan (Cth: Nasi Kebuli Gak Pake Sambal)..." class="w-full text-xs text-gray-700 bg-transparent outline-none placeholder-gray-400 font-medium" />
             </div>
-            <button onclick="submitOrderToCloud()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-black px-6 py-2.5 rounded-xl text-sm transition shadow-md">
-                KIRIM <i class="fa-solid fa-arrow-right ml-1"></i>
-            </button>
+
+            <!-- Utama Bar Pengiriman Order -->
+            <div class="flex items-center justify-between bg-emerald-800 text-white p-4 rounded-3xl shadow-xl border border-emerald-700">
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <i class="fa-solid fa-basket-shopping text-2xl"></i>
+                        <span id="bottom-bar-qty-badge" class="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-emerald-800">0</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-sm tracking-tight">Kirim Order ke Kasir</p>
+                        <p id="bottom-bar-total" class="text-xs text-emerald-200 font-medium">Rp 0</p>
+                    </div>
+                </div>
+                <button onclick="submitOrderToCloud()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-black px-6 py-2.5 rounded-xl text-sm transition shadow-md">
+                    KIRIM <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -268,17 +255,10 @@
     <div id="reward-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl w-full max-w-md shadow-xl border modal-animate-in overflow-hidden">
             <div class="bg-amber-500 p-5 flex justify-between items-center">
-                <h4 class="font-bold text-base text-amber-950 flex items-center gap-2">
-                    <i class="fa-solid fa-gift"></i> Katalog Reward Poin
-                </h4>
+                <h4 class="font-bold text-base text-amber-950 flex items-center gap-2"><i class="fa-solid fa-gift"></i> Katalog Reward Poin</h4>
                 <button onclick="closeRewardModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-amber-600/30 text-amber-950 text-xl font-bold hover:bg-amber-600/50">×</button>
             </div>
-            <div class="p-5 space-y-3 text-sm max-h-[60vh] overflow-y-auto" id="reward-modal-content">
-                <p class="text-gray-400 text-center py-2">Memuat katalog hadiah...</p>
-            </div>
-            <div class="p-4 bg-gray-50 border-t text-center">
-                <p class="text-xs text-gray-500">Poin Kakak akan dipotong otomatis jika penukaran hadiah berhasil.</p>
-            </div>
+            <div class="p-5 space-y-3 text-sm max-h-[60vh] overflow-y-auto" id="reward-modal-content"></div>
         </div>
     </div>
 
@@ -286,20 +266,13 @@
     <div id="order-detail-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl w-full max-w-sm shadow-xl border modal-animate-in overflow-hidden">
             <div class="bg-emerald-700 text-white p-4 flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-receipt"></i>
-                    <span class="font-bold text-sm" id="modal-order-id">Detail Transaksi</span>
-                </div>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-receipt"></i> <span class="font-bold text-sm" id="modal-order-id">Detail Transaksi</span></div>
                 <button onclick="closeOrderDetailModal()" class="text-white text-xl font-bold hover:text-gray-200">×</button>
             </div>
             <div class="p-5 space-y-4 text-xs" id="modal-order-content"></div>
-            <div class="p-4 bg-gray-50 border-t text-center">
-                <p class="text-[10px] text-gray-400">Terima kasih telah setia menjadi VVIP Member Warunk Arsi</p>
-            </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT SYSTEM ENGINE -->
     <script>
         const SUPABASE_URL = "https://tcaizfemtfmfeuutgbct.supabase.co"; 
         const SUPABASE_ANON_KEY = "sb_publishable_3SBNDNn6tk9Ssl6dZOxi6Q_e2ZFFH14"; 
@@ -315,7 +288,7 @@
             if(data && data.logo_url) {
                 document.getElementById('running-text').innerText = data.pengumuman;
                 document.getElementById('app-logo').src = data.logo_url;
-                document.getElementById('footer-logo').src = data.logo_url; // Inject asset gambar ke footer logo agar ga broken image
+                document.getElementById('footer-logo').src = data.logo_url;
             }
         }
 
@@ -342,7 +315,6 @@
             }
 
             currentOrdersCache = data;
-
             container.innerHTML = data.map((ord, index) => {
                 let badgeColor = "bg-blue-100 text-blue-800 border-blue-200";
                 if(ord.status === 'Antrean') badgeColor = "bg-blue-50 text-blue-700 border-blue-200";
@@ -357,7 +329,6 @@
                                 <span class="font-bold text-gray-700">${ord.order_id}</span>
                                 <span class="text-[9px] text-gray-400">| Rp ${ord.total_harga.toLocaleString('id-ID')}</span>
                             </div>
-                            <p class="text-[9px] text-gray-400 mt-0.5">${ord.created_at ? new Date(ord.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit'}) : 'Baru Saja'}</p>
                         </div>
                         <span class="${badgeColor} text-[9px] px-2.5 py-0.5 border rounded-full font-bold uppercase tracking-wider">${ord.status}</span>
                     </div>
@@ -370,78 +341,49 @@
             if(!order) return;
 
             document.getElementById('modal-order-id').innerText = `Detail Pesanan: ${order.order_id}`;
-            let itemDetailsHtml = '';
-            if (Array.isArray(order.detail_items)) {
-                itemDetailsHtml = order.detail_items.map(item => `
-                    <div class="flex justify-between items-center py-1.5 border-b border-gray-100">
-                        <div>
-                            <p class="font-bold text-gray-800">${item.nama}</p>
-                            <p class="text-[10px] text-gray-400">${item.qty} x Rp ${item.harga.toLocaleString('id-ID')}</p>
-                        </div>
-                        <span class="font-bold text-gray-700">Rp ${(item.qty * item.harga).toLocaleString('id-ID')}</span>
+            let itemDetailsHtml = order.detail_items.map(item => `
+                <div class="flex justify-between items-center py-1.5 border-b border-gray-100">
+                    <div>
+                        <p class="font-bold text-gray-800">${item.nama}</p>
+                        <p class="text-[10px] text-gray-400">${item.qty} x Rp ${item.harga.toLocaleString('id-ID')}</p>
                     </div>
-                `).join('');
-            } else {
-                itemDetailsHtml = `<p class="italic text-gray-400 py-1">Detail menu tidak dapat dimuat.</p>`;
-            }
-
-            let statusBadgeColor = "bg-blue-100 text-blue-800";
-            if(order.status === 'Diproses') statusBadgeColor = "bg-amber-100 text-amber-800";
-            if(order.status === 'Selesai') statusBadgeColor = "bg-emerald-100 text-emerald-800";
-            if(order.status === 'Batal') statusBadgeColor = "bg-red-100 text-red-800";
+                    <span class="font-bold text-gray-700">Rp ${(item.qty * item.harga).toLocaleString('id-ID')}</span>
+                </div>
+            `).join('');
 
             const modalContent = document.getElementById('modal-order-content');
             modalContent.innerHTML = `
-                <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border">
-                    <div>
-                        <p class="text-[10px] text-gray-400 uppercase">Status Pesanan</p>
-                        <p class="font-bold text-gray-700 mt-0.5">${order.status}</p>
-                    </div>
-                    <span class="${statusBadgeColor} px-3 py-1 rounded-full font-bold uppercase tracking-wide text-[9px]">${order.status}</span>
+                <div class="bg-gray-50 p-2 rounded-xl border mb-3">
+                    <p class="text-[9px] text-gray-400 font-bold uppercase">Catatan Request:</p>
+                    <p class="font-medium text-gray-700 text-[11px] mt-0.5">${order.catatan || '<span class="text-gray-400 italic">Tidak ada catatan</span>'}</p>
                 </div>
-                <div>
-                    <p class="font-bold text-gray-500 mb-1 tracking-wide uppercase text-[10px]">Daftar Menu:</p>
-                    <div class="max-h-[150px] overflow-y-auto pr-1">
-                        ${itemDetailsHtml}
-                    </div>
-                </div>
-                <div class="pt-2 flex justify-between items-center text-sm font-black text-gray-800">
-                    <span>TOTAL PEMBAYARAN:</span>
+                <div class="max-h-[150px] overflow-y-auto">${itemDetailsHtml}</div>
+                <div class="pt-3 flex justify-between items-center text-sm font-black text-gray-800 border-t mt-2">
+                    <span>TOTAL NOTA:</span>
                     <span class="text-emerald-700 text-base">Rp ${order.total_harga.toLocaleString('id-ID')}</span>
                 </div>
             `;
-
             document.getElementById('order-detail-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
         }
 
-        function closeOrderDetailModal() {
-            document.getElementById('order-detail-modal').classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-
+        function closeOrderDetailModal() { document.getElementById('order-detail-modal').classList.add('hidden'); }
         function toggleRegisterForm(show) {
             document.getElementById('member-login').classList.toggle('hidden', show);
             document.getElementById('member-register').classList.toggle('hidden', !show);
         }
 
         function openRewardModal() {
-            if(!activeMember) { alert('Silakan login terlebih dahulu, Kak!'); return; }
+            if(!activeMember) return;
             document.getElementById('reward-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
             renderMenuUI(true); 
         }
-
-        function closeRewardModal() {
-            document.getElementById('reward-modal').classList.add('hidden');
-            document.body.style.overflow = '';
-        }
+        function closeRewardModal() { document.getElementById('reward-modal').classList.add('hidden'); }
 
         async function checkMemberStatus() {
             const wa = document.getElementById('member-wa-input').value.trim();
             if(!wa) { alert('Mohon isi nomor WhatsApp Anda!'); return; }
-            const { data, error } = await _supabase.from('members').select('*').eq('wa', wa).single();
-            if(error || !data) { alert('Nomor WhatsApp tidak terdaftar!'); return; }
+            const { data } = await _supabase.from('members').select('*').eq('wa', wa).single();
+            if(!data) { alert('Nomor WhatsApp tidak terdaftar!'); return; }
             
             updateMemberUI(data);
             await syncMenuFromCloud();
@@ -460,53 +402,46 @@
 
         async function syncMenuFromCloud() {
             const { data } = await _supabase.from('menu').select('*').order('id', { ascending: true });
-            if(data) { 
-                cloudMenu = data; 
-                renderMenuUI(); 
-                renderCart(); 
-            }
+            if(data) { cloudMenu = data; renderMenuUI(); renderCart(); }
         }
 
-        function filterMenu(source) {
-            renderMenuUI();
-        }
+        function filterMenu() { renderMenuUI(); }
 
+        // SINKRONISASI STOK TERSEDIA / HABIS SECARA OTOMATIS BERDASARKAN HASIL RE-DASHBOARD POS
         function getActionBtnHtml(item, hargaFinal, isFlash) {
+            if (!item.is_tersedia) {
+                return `<span class="bg-red-100 text-red-600 font-bold text-[10px] px-2.5 py-1.5 rounded-full border border-red-200">Habis</span>`;
+            }
             const exist = memberCart.find(c => c.id === item.id);
             const baseClass = isFlash ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700';
 
             if(exist && exist.qty > 0) {
                 return `
-                    <div class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-100 rounded-full p-1 shadow-inner relative z-10">
-                        <button onclick="decrementQty('${item.id}')" class="bg-white text-emerald-700 font-bold w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow flex items-center justify-center">-</button>
-                        <span class="font-bold text-emerald-900 text-sm w-3 sm:w-4 text-center">${exist.qty}</span>
-                        <button onclick="addToCart('${item.id}', ${hargaFinal})" class="bg-emerald-600 text-white font-bold w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow flex items-center justify-center">+</button>
+                    <div class="flex items-center gap-1 bg-emerald-50 border border-emerald-100 rounded-full p-0.5 shadow-inner relative z-10">
+                        <button onclick="decrementQty('${item.id}')" class="bg-white text-emerald-700 font-bold w-6 h-6 rounded-full shadow flex items-center justify-center text-xs">-</button>
+                        <span class="font-bold text-emerald-900 text-xs w-3 text-center">${exist.qty}</span>
+                        <button onclick="addToCart('${item.id}', ${hargaFinal})" class="bg-emerald-600 text-white font-bold w-6 h-6 rounded-full shadow flex items-center justify-center text-xs">+</button>
                     </div>
                 `;
             } else {
-                return `<button onclick="addToCart('${item.id}', ${hargaFinal})" class="${baseClass} text-white font-bold text-lg w-8 h-8 sm:w-9 sm:h-9 rounded-full shadow-lg flex items-center justify-center transition hover:scale-105 pb-0.5 relative z-10">+</button>`;
+                return `<button onclick="addToCart('${item.id}', ${hargaFinal})" class="${baseClass} text-white font-bold text-sm w-7 h-7 rounded-full shadow flex items-center justify-center transition hover:scale-105 relative z-10">+</button>`;
             }
         }
 
         function renderMenuUI(onlyReward = false) {
-            const rewardMenus = cloudMenu.filter(item => item.butuh_poin > 0 && item.is_tersedia === true);
+            const rewardMenus = cloudMenu.filter(item => item.butuh_poin > 0);
             const rewardModalContent = document.getElementById('reward-modal-content');
             
-            if (rewardMenus.length === 0) {
-                rewardModalContent.innerHTML = '<p class="text-gray-400 text-center py-6 text-sm">Belum ada reward poin tersedia, Kak.</p>';
-            } else {
-                rewardModalContent.innerHTML = rewardMenus.map(item => {
-                    const poinButuh = item.butuh_poin; 
-                    return `
-                        <div class="p-3.5 border rounded-2xl flex justify-between items-center bg-amber-50/50 border-amber-200">
-                            <div>
-                                <p class="font-bold text-gray-800 text-sm">${item.nama}</p>
-                                <p class="text-xs text-amber-600 font-bold mt-0.5">Butuh: ${poinButuh} Poin</p>
-                            </div>
-                            <button onclick="claimRewardMenu('${item.nama}', ${poinButuh})" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm">Tukar</button>
+            if(rewardModalContent) {
+                rewardModalContent.innerHTML = rewardMenus.map(item => `
+                    <div class="p-3 border rounded-2xl flex justify-between items-center ${item.is_tersedia ? 'bg-amber-50/50 border-amber-200' : 'bg-gray-50 border-gray-200 opacity-60'}">
+                        <div>
+                            <p class="font-bold text-gray-800 text-sm">${item.nama}</p>
+                            <p class="text-xs text-amber-600 font-bold mt-0.5">Butuh: ${item.butuh_poin} Poin</p>
                         </div>
-                    `;
-                }).join('');
+                        ${item.is_tersedia ? `<button onclick="claimRewardMenu('${item.nama}', ${item.butuh_poin})" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm">Tukar</button>` : `<span class="text-red-500 text-xs font-bold">Menu Habis</span>`}
+                    </div>
+                `).join('');
             }
 
             if(onlyReward) return; 
@@ -515,9 +450,8 @@
             const searchMobile = document.getElementById('search-menu-mobile') ? document.getElementById('search-menu-mobile').value.toLowerCase() : '';
             const searchTerm = searchMobile || searchDesktop;
 
-            const availableMenu = cloudMenu.filter(item => item.is_tersedia === true);
-            const filteredMenu = availableMenu.filter(item => item.nama.toLowerCase().includes(searchTerm) || item.kategori.toLowerCase().includes(searchTerm));
-
+            // KONDISI UTAMA: Tampilkan semua item menu, namun pasang filter teks pencarian
+            const filteredMenu = cloudMenu.filter(item => item.nama.toLowerCase().includes(searchTerm) || item.kategori.toLowerCase().includes(searchTerm));
             const flashSaleItems = filteredMenu.filter(item => item.harga_flash_sale > 0 && item.is_flash_sale === 1);
             const normalMenuItems = filteredMenu.filter(item => item.is_flash_sale !== 1);
 
@@ -530,26 +464,22 @@
                 fsSection.classList.remove('hidden');
                 fsContainer.innerHTML = flashSaleItems.map(item => {
                     const imgFix = item.gambar_url || "https://placehold.co/400x400/ecfdf5/065f46?text=Warunk+Arsi";
-                    const hargaFinal = item.harga_flash_sale;
                     return `
-                        <div class="bg-white rounded-3xl border border-red-100 shadow-sm overflow-hidden flex flex-row w-[320px] flex-shrink-0" id="item-fs-${item.id}">
+                        <div class="bg-white rounded-3xl border border-red-100 shadow-sm overflow-hidden flex flex-row w-[300px] flex-shrink-0 ${item.is_tersedia ? '' : 'opacity-65'}">
                             <div class="relative w-2/5">
                                 <img src="${imgFix}" class="w-full h-full object-cover" alt="${item.nama}">
-                                <span class="absolute top-2 left-2 text-[9px] bg-red-600 text-white font-black px-2 py-1 rounded-full shadow-sm">FLASH SALE</span>
+                                <span class="absolute top-2 left-2 text-[8px] bg-red-600 text-white font-black px-2 py-0.5 rounded-full shadow-sm">FLASH SALE</span>
                             </div>
                             <div class="p-3 w-3/5 flex flex-col justify-between bg-red-50/10">
                                 <div>
-                                    <h4 class="font-bold text-sm text-gray-800 leading-snug line-clamp-2">${item.nama}</h4>
-                                    <span class="text-[10px] text-gray-400 font-medium mt-1 block">${item.kategori}</span>
+                                    <h4 class="font-bold text-xs text-gray-800 leading-snug line-clamp-2">${item.nama}</h4>
                                 </div>
                                 <div class="flex justify-between items-end mt-2">
                                     <div class="flex flex-col">
                                         <span class="text-[10px] line-through text-gray-400">Rp ${item.harga_normal.toLocaleString('id-ID')}</span>
-                                        <span class="text-red-600 font-black text-sm">Rp ${hargaFinal.toLocaleString('id-ID')}</span>
+                                        <span class="text-red-600 font-black text-xs">Rp ${item.harga_flash_sale.toLocaleString('id-ID')}</span>
                                     </div>
-                                    <div id="action-fs-${item.id}">
-                                        ${getActionBtnHtml(item, hargaFinal, true)}
-                                    </div>
+                                    <div id="action-fs-${item.id}">${getActionBtnHtml(item, item.harga_flash_sale, true)}</div>
                                 </div>
                             </div>
                         </div>
@@ -558,60 +488,45 @@
             }
 
             const normalMenuContainer = document.getElementById('member-menu-container');
-            if (normalMenuItems.length === 0 && flashSaleItems.length === 0) {
-                normalMenuContainer.innerHTML = `<p class="text-gray-400 text-sm col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 text-center py-10">Maaf Kak, menu tidak ditemukan atau sedang habis.</p>`;
-            } else {
-                normalMenuContainer.innerHTML = normalMenuItems.map(item => {
-                    const imgFix = item.gambar_url || "https://placehold.co/400x400/ecfdf5/065f46?text=Warunk+Arsi";
-                    const hargaFinal = item.harga_normal;
-                    return `
-                        <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col relative" id="item-norm-${item.id}">
-                            <div class="relative w-full aspect-square bg-gray-50">
-                                <img src="${imgFix}" class="w-full h-full object-cover" alt="${item.nama}">
+            normalMenuContainer.innerHTML = normalMenuItems.map(item => {
+                const imgFix = item.gambar_url || "https://placehold.co/400x400/ecfdf5/065f46?text=Warunk+Arsi";
+                return `
+                    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col relative ${item.is_tersedia ? '' : 'bg-gray-50/50'}" id="item-norm-${item.id}">
+                        <div class="relative w-full aspect-square bg-gray-50">
+                            <img src="${imgFix}" class="w-full h-full object-cover ${item.is_tersedia ? '' : 'grayscale opacity-50'}" alt="${item.nama}">
+                        </div>
+                        <div class="p-3 flex flex-col flex-1 justify-between">
+                            <div>
+                                <span class="text-[9px] text-gray-400 uppercase font-bold tracking-wider block mb-0.5">${item.kategori}</span>
+                                <h4 class="font-bold text-xs text-gray-800 leading-snug line-clamp-2">${item.nama}</h4>
                             </div>
-                            <div class="p-3.5 sm:p-4 flex flex-col flex-1 justify-between">
-                                <div>
-                                    <span class="text-[9px] sm:text-[10px] text-gray-400 uppercase font-bold tracking-wider block mb-1">${item.kategori}</span>
-                                    <h4 class="font-bold text-xs sm:text-sm text-gray-800 leading-snug line-clamp-2">${item.nama}</h4>
-                                </div>
-                                <div class="flex justify-between items-end mt-4">
-                                    <span class="text-gray-900 font-black text-sm sm:text-base">Rp ${hargaFinal.toLocaleString('id-ID')}</span>
-                                    <div id="action-norm-${item.id}" class="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10">
-                                        ${getActionBtnHtml(item, hargaFinal, false)}
-                                    </div>
-                                </div>
+                            <div class="flex justify-between items-end mt-3">
+                                <span class="text-gray-900 font-black text-xs sm:text-sm">Rp ${item.harga_normal.toLocaleString('id-ID')}</span>
+                                <div id="action-norm-${item.id}">${getActionBtnHtml(item, item.harga_normal, false)}</div>
                             </div>
                         </div>
-                    `;
-                }).join('');
-            }
+                    </div>
+                `;
+            }).join('');
         }
 
         function addToCart(id, hargaFix) {
             const menu = cloudMenu.find(m => m.id === id);
+            if (!menu.is_tersedia) return; // Proteksi stop order jika tiba-tiba habis
             const exist = memberCart.find(c => c.id === id);
-            if(exist) { exist.qty++; } else { memberCart.push({ id: menu.id, nama: menu.nama, harga: hargaFix, qty: 1, isFlash: (menu.harga_flash_sale > 0 && menu.is_flash_sale === 1) }); }
+            if(exist) { exist.qty++; } else { memberCart.push({ id: menu.id, nama: menu.nama, harga: hargaFix, qty: 1 }); }
             renderCart();
-            updateMenuButtonHtml(menu); 
+            renderMenuUI(); 
         }
 
         function decrementQty(id) {
             const existIndex = memberCart.findIndex(c => c.id === id);
             if(existIndex !== -1) {
                 memberCart[existIndex].qty--;
-                const menu = cloudMenu.find(m => m.id === id);
                 if(memberCart[existIndex].qty <= 0) { memberCart.splice(existIndex, 1); }
                 renderCart();
-                updateMenuButtonHtml(menu); 
+                renderMenuUI(); 
             }
-        }
-
-        function updateMenuButtonHtml(menu) {
-            const hargaFinal = (menu.harga_flash_sale > 0 && menu.is_flash_sale === 1) ? menu.harga_flash_sale : menu.harga_normal;
-            const actionFsContainer = document.getElementById(`action-fs-${menu.id}`);
-            if(actionFsContainer) actionFsContainer.innerHTML = getActionBtnHtml(menu, hargaFinal, true);
-            const actionNormContainer = document.getElementById(`action-norm-${menu.id}`);
-            if(actionNormContainer) actionNormContainer.innerHTML = getActionBtnHtml(menu, hargaFinal, false);
         }
 
         function renderCart() {
@@ -624,45 +539,19 @@
             if(totalItems > 0) {
                 qtyBadge.innerText = totalItems;
                 totalLabel.innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
-                if(stickyBar.classList.contains('hidden')) { stickyBar.classList.remove('hidden'); }
+                stickyBar.classList.remove('hidden');
             } else {
                 stickyBar.classList.add('hidden');
             }
         }
 
-        async function claimRewardMenu(menuNama, biayaPoin) {
-            if (activeMember.poin < biayaPoin) { alert(`Maaf, poin Kakak tidak mencukupi!`); return; }
-            if (!confirm(`Yakin ingin menukarkan ${biayaPoin} poin dengan 1 ${menuNama}?`)) return;
-
-            closeRewardModal();
-            const poinBaru = activeMember.poin - biayaPoin;
-            const { error: errPoin } = await _supabase.from('members').update({ poin: poinBaru }).eq('id', activeMember.id);
-            if(errPoin) { alert('Gagal memproses penukaran poin.'); return; }
-
-            const orderId = 'REWARD-' + Math.floor(1000 + Math.random() * 9000);
-            const rewardItem = [{ id: 'REWARD', nama: `${menuNama} (Free Poin)`, harga: 0, qty: 1 }];
-
-            await _supabase.from('orders').insert([{
-                order_id: orderId,
-                member_id: activeMember.id,
-                member_name: activeMember.nama,
-                member_wa: activeMember.wa,
-                detail_items: rewardItem,
-                total_harga: 0,
-                status: 'Antrean'
-            }]);
-
-            alert(`Sukses! ${biayaPoin} Poin dipotong. Menu reward gratisan Kakak sudah dikirim ke antrean Kasir!`);
-            activeMember.poin = poinBaru;
-            document.getElementById('dash-poin').innerHTML = `${poinBaru} <span class="text-xs font-normal text-white">Poin</span>`;
-            await streamLiveOrders();
-        }
-
         async function submitOrderToCloud() {
-            if(!activeMember) return;
-            if(memberCart.length === 0) { alert('Keranjang belanja Kakak masih kosong!'); return; }
+            if(!activeMember || memberCart.length === 0) return;
             const total = memberCart.reduce((acc, c) => acc + (c.harga * c.qty), 0);
             const orderId = 'TX-' + Math.floor(1000 + Math.random() * 9000);
+            
+            // Ambil value input dari kolom catatan baru
+            const noteText = document.getElementById('order-note-input').value.trim();
 
             await _supabase.from('orders').insert([{
                 order_id: orderId,
@@ -671,26 +560,42 @@
                 member_wa: activeMember.wa,
                 detail_items: memberCart,
                 total_harga: total,
-                status: 'Antrean'
+                status: 'Antrean',
+                catatan: noteText // Mengisi kolom catatan di Supabase lo
             }]);
 
             alert('Siap, Kak! Pesanan sukses dikirim ke Kasir Warunk Arsi! Silakan lakukan pembayaran di kasir ya.');
             memberCart = [];
+            document.getElementById('order-note-input').value = ''; // Reset inputan catatan
             renderCart();
             renderMenuUI(); 
             await streamLiveOrders();
         }
 
-        async function registerNewMember() {
-            const name = document.getElementById('reg-name').value.trim();
-            const wa = document.getElementById('reg-wa').value.trim();
-            if(!name || !wa) { alert('Mohon lengkapi Nama & No. WA Anda!'); return; }
-            const nextId = 'WA' + Math.floor(100 + Math.random() * 900);
-            await _supabase.from('members').insert([{ id: nextId, nama: name, wa: wa, poin: 0 }]);
-            alert('Pendaftaran Sukses! Silakan Login.');
-            toggleRegisterForm(false);
-            document.getElementById('member-wa-input').value = wa;
-            checkMemberStatus();
+        async function claimRewardMenu(menuNama, biayaPoin) {
+            if (activeMember.poin < biayaPoin) { alert(`Maaf, poin Kakak tidak mencukupi!`); return; }
+            if (!confirm(`Yakin ingin menukarkan ${biayaPoin} poin dengan 1 ${menuNama}?`)) return;
+
+            closeRewardModal();
+            const poinBaru = activeMember.poin - biayaPoin;
+            await _supabase.from('members').update({ poin: poinBaru }).eq('id', activeMember.id);
+
+            const orderId = 'REWARD-' + Math.floor(1000 + Math.random() * 9000);
+            await _supabase.from('orders').insert([{
+                order_id: orderId,
+                member_id: activeMember.id,
+                member_name: activeMember.nama,
+                member_wa: activeMember.wa,
+                detail_items: [{ id: 'REWARD', nama: `${menuNama} (Free Poin)`, harga: 0, qty: 1 }],
+                total_harga: 0,
+                status: 'Antrean',
+                catatan: 'Klaim Hadiah Reward Poin VVIP'
+            }]);
+
+            alert(`Sukses Tukar Poin!`);
+            activeMember.poin = poinBaru;
+            document.getElementById('dash-poin').innerHTML = `${poinBaru} <span class="text-xs font-normal text-white">Poin</span>`;
+            await streamLiveOrders();
         }
 
         window.onload = () => { 
@@ -704,6 +609,8 @@
                             document.getElementById('dash-poin').innerHTML = `${data.poin} <span class="text-xs font-normal text-white">Poin</span>`;
                         }
                     });
+                    // Tarik data real-time menu & status antrean order tiap 15 detik agar sinkron otomatis dengan POS Kasir
+                    syncMenuFromCloud();
                     streamLiveOrders();
                 }
             }, 15000); 
