@@ -24,31 +24,25 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans relative">
 
-    <!-- RUNNING TEXT PENGUMUMAN TOKO -->
     <div class="bg-amber-400 text-amber-950 font-bold py-1.5 text-xs overflow-hidden shadow-sm sticky top-0 z-[60]">
         <marquee scrollamount="5" id="running-text">Memuat pengumuman terbaru Warunk Arsi...</marquee>
     </div>
 
-    <!-- HEADER PORTAL -->
     <header class="bg-emerald-700 text-white shadow-md sticky top-[30px] z-[60]">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center relative w-full">
             
-            <!-- Branding Area -->
             <div class="flex items-center space-x-3 flex-shrink-0">
                 <img id="app-logo" src="https://img.icons8.com/color/96/store-front.png" class="w-8 h-8 object-cover rounded-full bg-white p-0.5" alt="Logo">
                 <span class="font-bold text-base md:text-lg tracking-wide whitespace-nowrap">WARUNK ARSI MEMBER</span>
             </div>
 
-            <!-- RESPONSIVE SEARCH COMPONENT -->
             <div id="header-search-wrapper" class="hidden flex-1 flex justify-end items-center ml-4">
-                <!-- Versi Desktop -->
                 <div class="hidden sm:relative sm:block w-full sm:max-w-xs md:max-w-sm">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <i class="fa-solid fa-magnifying-glass text-emerald-300 text-sm"></i>
                     </div>
                     <input type="text" id="search-menu-desktop" oninput="filterMenu('desktop')" placeholder="Cari menu favorit Kakak..." class="w-full bg-emerald-800/60 text-white placeholder-emerald-200 text-xs md:text-sm rounded-full pl-9 pr-4 py-2 outline-none border border-emerald-600/50 transition-all focus:bg-emerald-900 focus:border-amber-400" />
                 </div>
-                <!-- Versi Mobile -->
                 <button onclick="toggleMobileSearch()" class="block sm:hidden text-lg p-1 text-emerald-100 hover:text-white transition focus:outline-none translate-x-1" id="mobile-search-trigger">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -56,7 +50,6 @@
 
         </div>
 
-        <!-- OPSI SLIDE DOWN BAR PENCARIAN MOBILE -->
         <div id="mobile-search-bar" class="hidden border-t border-emerald-800 bg-emerald-800 px-4 py-2.5 sm:hidden">
             <div class="relative w-full">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -72,7 +65,6 @@
 
     <main class="max-w-6xl mx-auto p-4 sm:p-6 pb-24">
         
-        <!-- FORM LOGIN ACCESS -->
         <div id="member-login" class="max-w-md mx-auto bg-white rounded-3xl shadow-sm border p-8 mt-10 space-y-6">
             <div class="text-center space-y-2">
                 <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl">
@@ -91,7 +83,6 @@
             </div>
         </div>
 
-        <!-- FORM REGISTRASI -->
         <div id="member-register" class="max-w-md mx-auto bg-white rounded-3xl shadow-sm border p-8 mt-10 space-y-4 hidden">
             <h3 class="text-lg font-bold text-center">Pendaftaran Member VVIP</h3>
             <div class="space-y-3 text-sm">
@@ -108,11 +99,9 @@
             </div>
         </div>
 
-        <!-- DASHBOARD HUB -->
         <div id="member-dashboard" class="hidden space-y-6">
             <div class="bg-white p-4 sm:p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div class="flex flex-col lg:flex-row gap-6">
-                    <!-- Kartu Membership VVIP -->
                     <div class="w-full lg:w-5/12 bg-gradient-to-br from-emerald-600 to-teal-800 text-white p-5 rounded-3xl shadow-md flex flex-col justify-between min-h-[170px]">
                         <div class="flex justify-between items-start">
                           <div>
@@ -130,7 +119,6 @@
                         </div>
                     </div>
 
-                    <!-- Kanan: Widget Status Real-time -->
                     <div class="flex-1 w-full flex flex-col justify-between gap-4">
                         <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex-1 flex flex-col justify-between min-h-[110px]">
                             <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
@@ -144,7 +132,6 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Aksi Bawah -->
                         <div class="flex gap-3 w-full flex-shrink-0">
                             <button onclick="openRewardModal()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-amber-950 font-bold py-3.5 rounded-2xl transition flex items-center justify-center gap-2 text-sm shadow-sm border border-amber-400">
                                 <i class="fa-solid fa-gift"></i> Tukar Poin
@@ -155,9 +142,7 @@
                 </div>
             </div>
             
-            <!-- LIST SECTION PRODUK -->
             <div class="max-w-7xl mx-auto space-y-10">
-                <!-- Area Flash Sale -->
                 <div id="flash-sale-section" class="space-y-4 hidden relative">
                     <div class="flex justify-between items-center px-1">
                         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
@@ -167,9 +152,8 @@
                     <div class="flex overflow-x-auto gap-4 pb-4 -mb-4 px-1" id="flash-sale-container"></div>
                 </div>
 
-                <!-- Area Grid Menu Utama -->
                 <div class="space-y-4 px-1">
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                    h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
                         <i class="fa-solid fa-utensils text-emerald-600"></i> Pilih Menu Order Mandiri
                     </h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6" id="member-menu-container">
@@ -180,7 +164,6 @@
         </div>
     </main>
 
-    <!-- COMPLIANT FOOTER COMPONENT -->
     <footer class="bg-emerald-950 text-gray-300 text-xs border-t-2 border-emerald-800 mt-16 relative z-50">
         <div class="max-w-6xl mx-auto px-6 py-10">
             <div class="block-table">
@@ -222,17 +205,14 @@
         </div>
     </footer>
 
-    <!-- STICKY ORDER BAR (DENGAN BARIS INPUT CATATAN BARU SEBELUM TOMBOL KIRIM) -->
     <div id="sticky-order-bar" class="fixed bottom-0 left-0 right-0 z-[70] px-3 pb-3 pt-2 bg-gradient-to-t from-white/95 to-white/0 hidden pointer-events-none">
         <div class="max-w-md mx-auto flex flex-col gap-2 pointer-events-auto">
             
-            <!-- Tambahan Kolom Catatan Request Mandiri -->
             <div class="w-full bg-white/95 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-md border border-gray-200 flex items-center gap-2">
                 <i class="fa-solid fa-pen-to-square text-emerald-700 text-sm"></i>
                 <input type="text" id="order-note-input" placeholder="Tambah catatan (Cth: Nasi Kebuli Gak Pake Sambal)..." class="w-full text-xs text-gray-700 bg-transparent outline-none placeholder-gray-400 font-medium" />
             </div>
 
-            <!-- Utama Bar Pengiriman Order -->
             <div class="flex items-center justify-between bg-emerald-800 text-white p-4 rounded-3xl shadow-xl border border-emerald-700">
                 <div class="flex items-center gap-4">
                     <div class="relative">
@@ -251,7 +231,6 @@
         </div>
     </div>
 
-    <!-- REWARD MODAL CATALOG POPUP -->
     <div id="reward-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl w-full max-w-md shadow-xl border modal-animate-in overflow-hidden">
             <div class="bg-amber-500 p-5 flex justify-between items-center">
@@ -262,7 +241,6 @@
         </div>
     </div>
 
-    <!-- MODAL DETAIL TRANSAKSI -->
     <div id="order-detail-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl w-full max-w-sm shadow-xl border modal-animate-in overflow-hidden">
             <div class="bg-emerald-700 text-white p-4 flex justify-between items-center">
@@ -270,6 +248,95 @@
                 <button onclick="closeOrderDetailModal()" class="text-white text-xl font-bold hover:text-gray-200">×</button>
             </div>
             <div class="p-5 space-y-4 text-xs" id="modal-order-content"></div>
+        </div>
+    </div>
+
+    <div id="checkout-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl w-full max-w-md shadow-xl border modal-animate-in overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="bg-emerald-700 text-white p-5 flex justify-between items-center flex-shrink-0">
+                <h4 class="font-bold text-base flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i> Formulir Penyelesaian Order
+                </h4>
+                <button onclick="closeCheckoutModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-800/50 text-white text-xl font-bold hover:bg-emerald-900 transition">×</button>
+            </div>
+            
+            <div class="p-6 space-y-5 overflow-y-auto text-sm">
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-gray-400 font-bold uppercase">Total Pembayaran</p>
+                        <p id="checkout-total-label" class="text-xl font-black text-emerald-700 mt-0.5">Rp 0</p>
+                    </div>
+                    <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Metode Aman</span>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block font-bold text-gray-700"><i class="fa-solid fa-truck-ramp-box mr-1 text-emerald-600"></i> Opsi Pengambilan Pesanan</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label onclick="handleDeliveryChoice('ambil_langsung')" class="border-2 border-emerald-600 bg-emerald-50/30 p-3 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none" id="label-opsi-ambil">
+                            <i class="fa-solid fa-shop text-emerald-700 text-lg mb-1"></i>
+                            <span class="font-bold text-xs text-gray-800">Ambil Mandiri</span>
+                            <span class="text-[10px] text-gray-400 mt-0.5">Datang ke Warung</span>
+                            <input type="radio" name="opsi_ambil" id="r-ambil" value="Ambil Sendiri" checked class="hidden" />
+                        </label>
+                        <label onclick="handleDeliveryChoice('gosend')" class="border-2 border-gray-200 p-3 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition hover:border-emerald-500 select-none" id="label-opsi-gosend">
+                            <i class="fa-solid fa-motorcycle text-gray-500 text-lg mb-1" id="icon-gosend"></i>
+                            <span class="font-bold text-xs text-gray-800">Kirim GoSend</span>
+                            <span class="text-[10px] text-gray-400 mt-0.5">Ongkir ditanggung pembeli</span>
+                            <input type="radio" name="opsi_ambil" id="r-gosend" value="GoSend" class="hidden" />
+                        </label>
+                    </div>
+                </div>
+
+                <div id="kolom-alamat-checkout" class="space-y-1.5 hidden animate-fade-in">
+                    <label class="block font-bold text-gray-700 text-xs"><i class="fa-solid fa-map-location-dot mr-1 text-red-500"></i> Alamat Pengiriman Lengkap & Detail</label>
+                    <textarea id="checkout-alamat-input" placeholder="Tuliskan alamat lengkap pengiriman serta patokan lokasi..." class="w-full border rounded-xl p-3 text-xs focus:outline-emerald-600 bg-white min-h-[70px] resize-none"></textarea>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block font-bold text-gray-700"><i class="fa-solid fa-wallet mr-1 text-emerald-600"></i> Metode Pembayaran</label>
+                    <div class="space-y-2">
+                        <label onclick="handlePaymentChoice('cod')" class="border-2 border-emerald-600 bg-emerald-50/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition select-none" id="container-pay-cod">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-money-bill-wave text-emerald-700 text-base"></i>
+                                <div>
+                                    <p class="font-bold text-xs text-gray-800">Bayar di Tempat (COD)</p>
+                                    <p class="text-[10px] text-gray-400">Bayar tunai/debit saat ambil pesanan</p>
+                                </div>
+                            </div>
+                            <input type="radio" name="metode_bayar" id="r-pay-cod" value="Bayar di Tempat (COD)" checked class="accent-emerald-600" />
+                        </label>
+
+                        <label onclick="handlePaymentChoice('qris')" class="border-2 border-gray-200 p-3 rounded-xl flex items-center justify-between cursor-pointer transition select-none" id="container-pay-qris">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-qrcode text-gray-600 text-base" id="icon-qris"></i>
+                                <div>
+                                    <p class="font-bold text-xs text-gray-800">Transfer QRIS Otomatis</p>
+                                    <p class="text-[10px] text-gray-400">Scan barcode instan via e-wallet / m-banking</p>
+                                </div>
+                            </div>
+                            <input type="radio" name="metode_bayar" id="r-pay-qris" value="Transfer QRIS" class="accent-emerald-600" />
+                        </label>
+                    </div>
+                </div>
+
+                <div id="qris-display-container" class="hidden flex-col items-center justify-center p-4 border border-amber-200 bg-amber-50/40 rounded-2xl space-y-3">
+                    <p class="text-[10px] font-bold text-amber-800 text-center uppercase tracking-wide"><i class="fa-solid fa-circle-info mr-0.5"></i> Silakan Scan & Selesaikan Pembayaran Anda:</p>
+                    
+                    <div class="relative group bg-white p-3 rounded-2xl border border-gray-200 shadow-sm">
+                        <img id="qris-image" src="qris-arsi.jpg" class="w-48 h-auto object-contain mx-auto" alt="QRIS Warunk Arsi">
+                    </div>
+
+                    <button type="button" onclick="downloadQrisImage()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-2 shadow-sm transition active:scale-95 w-full sm:w-auto">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Simpan Gambar QRIS ke HP
+                    </button>
+                    
+                    <p class="text-[9px] text-gray-400 text-center italic">Setelah pesanan dikirim, simpan bukti transfer untuk divalidasi kasir.</p>
+                </div>
+
+                <button onclick="finalizedCheckoutProcess()" class="w-full bg-amber-500 hover:bg-amber-600 text-amber-950 font-black py-3.5 rounded-2xl transition shadow-md flex items-center justify-center gap-2 tracking-wide">
+                    KONFIRMASI & PROSES ORDER <i class="fa-solid fa-circle-check"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -407,7 +474,6 @@
 
         function filterMenu() { renderMenuUI(); }
 
-        // SINKRONISASI STOK TERSEDIA / HABIS SECARA OTOMATIS BERDASARKAN HASIL RE-DASHBOARD POS
         function getActionBtnHtml(item, hargaFinal, isFlash) {
             if (!item.is_tersedia) {
                 return `<span class="bg-red-100 text-red-600 font-bold text-[10px] px-2.5 py-1.5 rounded-full border border-red-200">Habis</span>`;
@@ -450,7 +516,6 @@
             const searchMobile = document.getElementById('search-menu-mobile') ? document.getElementById('search-menu-mobile').value.toLowerCase() : '';
             const searchTerm = searchMobile || searchDesktop;
 
-            // KONDISI UTAMA: Tampilkan semua item menu, namun pasang filter teks pencarian
             const filteredMenu = cloudMenu.filter(item => item.nama.toLowerCase().includes(searchTerm) || item.kategori.toLowerCase().includes(searchTerm));
             const flashSaleItems = filteredMenu.filter(item => item.harga_flash_sale > 0 && item.is_flash_sale === 1);
             const normalMenuItems = filteredMenu.filter(item => item.is_flash_sale !== 1);
@@ -512,7 +577,7 @@
 
         function addToCart(id, hargaFix) {
             const menu = cloudMenu.find(m => m.id === id);
-            if (!menu.is_tersedia) return; // Proteksi stop order jika tiba-tiba habis
+            if (!menu.is_tersedia) return; 
             const exist = memberCart.find(c => c.id === id);
             if(exist) { exist.qty++; } else { memberCart.push({ id: menu.id, nama: menu.nama, harga: hargaFix, qty: 1 }); }
             renderCart();
@@ -545,15 +610,128 @@
             }
         }
 
+        // ==========================================
+        // LOGIKA KONTROL FITUR CHECKOUT FORM
+        // ==========================================
+        
+        function openCheckoutModal() {
+            if(!activeMember || memberCart.length === 0) return;
+            const totalPrice = memberCart.reduce((acc, c) => acc + (c.harga * c.qty), 0);
+            document.getElementById('checkout-total-label').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            
+            handleDeliveryChoice('ambil_langsung');
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function handleDeliveryChoice(type) {
+            const lblAmbil = document.getElementById('label-opsi-ambil');
+            const lblGosend = document.getElementById('label-opsi-gosend');
+            const iconGosend = document.getElementById('icon-gosend');
+            const areaAlamat = document.getElementById('kolom-alamat-checkout');
+            
+            if(type === 'ambil_langsung') {
+                document.getElementById('r-ambil').checked = true;
+                lblAmbil.className = "border-2 border-emerald-600 bg-emerald-50/30 p-3 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none shadow-xs";
+                lblGosend.className = "border-2 border-gray-200 p-3 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition hover:border-emerald-500 select-none";
+                iconGosend.className = "fa-solid fa-motorcycle text-gray-400 text-lg mb-1";
+                areaAlamat.classList.add('hidden');
+                
+                document.getElementById('container-pay-cod').style.display = 'flex';
+            } else if(type === 'gosend') {
+                document.getElementById('r-gosend').checked = true;
+                lblGosend.className = "border-2 border-emerald-600 bg-emerald-50/30 p-3 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none shadow-xs";
+                lblAmbil.className = "border-2 border-gray-200 p-3 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition hover:border-emerald-500 select-none";
+                iconGosend.className = "fa-solid fa-motorcycle text-emerald-700 text-lg mb-1";
+                areaAlamat.classList.remove('hidden');
+                document.getElementById('checkout-alamat-input').focus();
+                
+                document.getElementById('container-pay-cod').style.display = 'none';
+                handlePaymentChoice('qris');
+            }
+        }
+
+        function handlePaymentChoice(payType) {
+            const containerCod = document.getElementById('container-pay-cod');
+            const containerQris = document.getElementById('container-pay-qris');
+            const iconQris = document.getElementById('icon-qris');
+            const qrisDisplay = document.getElementById('qris-display-container');
+            
+            if(payType === 'cod') {
+                document.getElementById('r-pay-cod').checked = true;
+                containerCod.className = "border-2 border-emerald-600 bg-emerald-50/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition select-none";
+                containerQris.className = "border-2 border-gray-200 p-3 rounded-xl flex items-center justify-between cursor-pointer transition select-none";
+                iconQris.className = "fa-solid fa-qrcode text-gray-600 text-base";
+                qrisDisplay.classList.add('hidden');
+            } else if(payType === 'qris') {
+                document.getElementById('r-pay-qris').checked = true;
+                containerQris.className = "border-2 border-emerald-600 bg-emerald-50/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition select-none";
+                containerCod.className = "border-2 border-gray-200 p-3 rounded-xl flex items-center justify-between cursor-pointer transition select-none";
+                iconQris.className = "fa-solid fa-qrcode text-emerald-700 text-base";
+                qrisDisplay.classList.remove('hidden');
+            }
+        }
+
+        // FUNGSI DOWNLOAD IMAGES QRIS BARCODE (VERSI JALUR LOKAL AMAN REPOSiTORI)
+        async function downloadQrisImage() {
+            const qrisImgElement = document.getElementById('qris-image');
+            if(!qrisImgElement) return;
+
+            try {
+                // Fetch resource langsung menggunakan path lokal yang aman dari blokir CORS
+                const response = await fetch(qrisImgElement.src);
+                if (!response.ok) throw new Error('Gagal memuat file gambar.');
+                
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const downloadLink = document.createElement('a');
+                downloadLink.href = blobUrl;
+                downloadLink.download = 'QRIS_Warunk_Arsi.jpg';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                
+                // Hapus stream memori blob setelah diunduh
+                document.body.removeChild(downloadLink);
+                window.URL.revokeObjectURL(blobUrl);
+            } catch (err) {
+                // Jika sandbox browser membatasi, fallback buka gambar di tab baru agar user bisa save manual
+                window.open(qrisImgElement.src, '_blank');
+            }
+        }
+
         async function submitOrderToCloud() {
             if(!activeMember || memberCart.length === 0) return;
+            openCheckoutModal();
+        }
+
+        async function finalizedCheckoutProcess() {
             const total = memberCart.reduce((acc, c) => acc + (c.harga * c.qty), 0);
             const orderId = 'TX-' + Math.floor(1000 + Math.random() * 9000);
             
-            // Ambil value input dari kolom catatan baru
             const noteText = document.getElementById('order-note-input').value.trim();
+            const opsiAmbil = document.querySelector('input[name="opsi_ambil"]:checked').value;
+            const metodeBayar = document.querySelector('input[name="metode_bayar"]:checked').value;
+            const alamatTeks = document.getElementById('checkout-alamat-input').value.trim();
 
-            await _supabase.from('orders').insert([{
+            if(opsiAmbil === 'GoSend' && !alamatTeks) {
+                alert('Mohon isi alamat pengiriman lengkap untuk rute armada kurir GoSend!');
+                document.getElementById('checkout-alamat-input').focus();
+                return;
+            }
+
+            let catatanGabungan = `[Opsi: ${opsiAmbil}] [Bayar: ${metodeBayar}]`;
+            if(opsiAmbil === 'GoSend') {
+                catatanGabungan += ` Alamat: ${alamatTeks}.`;
+            }
+            if(noteText) {
+                catatanGabungan += ` Catatan Tambahan: ${noteText}`;
+            }
+
+            const { error } = await _supabase.from('orders').insert([{
                 order_id: orderId,
                 member_id: activeMember.id,
                 member_name: activeMember.nama,
@@ -561,12 +739,20 @@
                 detail_items: memberCart,
                 total_harga: total,
                 status: 'Antrean',
-                catatan: noteText // Mengisi kolom catatan di Supabase lo
+                catatan: catatanGabungan
             }]);
 
-            alert('Siap, Kak! Pesanan sukses dikirim ke Kasir Warunk Arsi! Silakan lakukan pembayaran di kasir ya.');
+            if (error) {
+                alert('Gagal mengirimkan order, silahkan coba beberapa saat lagi.');
+                return;
+            }
+
+            alert(`Siap, Kak! Pesanan (${orderId}) sukses dikirim ke Kasir Warunk Arsi!\n\nMetode: ${opsiAmbil}\nPembayaran: ${metodeBayar}\n\nSilakan cek pembaruan status berkala pada dashboard portal Kakak.`);
+            
             memberCart = [];
-            document.getElementById('order-note-input').value = ''; // Reset inputan catatan
+            document.getElementById('order-note-input').value = '';
+            document.getElementById('checkout-alamat-input').value = '';
+            closeCheckoutModal();
             renderCart();
             renderMenuUI(); 
             await streamLiveOrders();
@@ -609,7 +795,6 @@
                             document.getElementById('dash-poin').innerHTML = `${data.poin} <span class="text-xs font-normal text-white">Poin</span>`;
                         }
                     });
-                    // Tarik data real-time menu & status antrean order tiap 15 detik agar sinkron otomatis dengan POS Kasir
                     syncMenuFromCloud();
                     streamLiveOrders();
                 }
