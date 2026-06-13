@@ -544,6 +544,21 @@
             .total-bayar-value { font-size: 22px; }
             .stok-card-ctrl { min-width: 90px; }
             .date-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+            /* Submit Stok: hint di atas (center), tombol full-width di bawah */
+            #submit-stok-footer {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            #submit-stok-footer .submit-stok-hint {
+                text-align: center;
+                order: -1;
+            }
+            #submit-stok-footer #btn-submit-stok {
+                width: 100%;
+                min-width: 0;
+            }
         }
 
         /* ─── TABS ─── */
@@ -998,8 +1013,8 @@
                         </div>
                     </div>
                 </div>
-                <div style="padding:14px 14px 16px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                    <div style="font-size:11px;color:var(--gray-400);">
+                <div id="submit-stok-footer" style="padding:14px 14px 16px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                    <div class="submit-stok-hint" style="font-size:11px;color:var(--gray-400);">
                         <i class="fa-solid fa-lightbulb" style="color:var(--amber-400);"></i>
                         Pastikan jumlah stok sudah benar sebelum submit
                     </div>
