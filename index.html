@@ -438,6 +438,10 @@
             animation: spin .8s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-dot {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: .4; transform: scale(1.4); }
+        }
         .loading-text { font-size: 13px; font-weight: 700; color: var(--gray-600); }
 
         /* ─── EMPTY STATE ─── */
@@ -936,16 +940,39 @@
         <!-- ─── TAB INPUT STOK ─── -->
         <div id="panel-input" class="tab-panel active">
 
-            <!-- Banner kunci — tampil saat sudah submit && belum di-unlock admin -->
+            <!-- Banner kunci — tampil saat mitra sudah submit sendiri && belum di-unlock admin -->
             <div id="input-lock-banner" style="display:none;align-items:flex-start;gap:12px;background:var(--amber-50);border:1.5px solid var(--amber-400);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;">
                 <i class="fa-solid fa-lock" style="color:var(--amber-600);font-size:18px;margin-top:1px;flex-shrink:0;"></i>
                 <div style="flex:1;min-width:0;">
                     <div style="font-size:13px;font-weight:800;color:var(--amber-700);">Input Stok Dikunci</div>
                     <div style="font-size:12px;color:var(--amber-600);margin-top:3px;">Anda sudah menginput stok hari ini. Untuk mengubah stok, kirim permintaan ke admin Warunk Arsi.</div>
                     <div style="font-size:11px;color:var(--amber-500);margin-top:6px;display:flex;align-items:center;gap:5px;"><i class="fa-solid fa-circle-info"></i> Halaman ini akan terbuka otomatis setelah admin memberikan izin.</div>
-                    <button id="btn-minta-edit" onclick="mintaEditUlang()" style="margin-top:10px;display:inline-flex;align-items:center;gap:7px;background:var(--amber-600);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 16px;font-family:var(--font);font-size:12px;font-weight:800;cursor:pointer;transition:background .15s;">
-                        <i class="fa-solid fa-paper-plane"></i> Minta Edit Ulang ke Admin
-                    </button>
+                    <div id="minta-edit-wrap" style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                        <button id="btn-minta-edit" onclick="mintaEditUlang()" style="display:inline-flex;align-items:center;gap:7px;background:var(--amber-600);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 16px;font-family:var(--font);font-size:12px;font-weight:800;cursor:pointer;transition:background .15s;">
+                            <i class="fa-solid fa-paper-plane"></i> Minta Edit Ulang ke Admin
+                        </button>
+                        <span id="edit-request-sent-badge" style="display:none;align-items:center;gap:5px;background:var(--green-100);color:var(--green-700);font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;border:1px solid var(--green-200);">
+                            <i class="fa-solid fa-clock"></i> Permintaan terkirim — menunggu admin
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner info — tampil khusus saat stok diinput oleh admin (mitra tidak perlu input) -->
+            <div id="input-admin-banner" style="display:none;align-items:flex-start;gap:12px;background:#eff6ff;border:1.5px solid #93c5fd;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;">
+                <i class="fa-solid fa-user-shield" style="color:#1d4ed8;font-size:18px;margin-top:1px;flex-shrink:0;"></i>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-size:13px;font-weight:800;color:#1e40af;">Stok Sudah Diinput oleh Admin</div>
+                    <div style="font-size:12px;color:#1d4ed8;margin-top:3px;">Admin Warunk Arsi telah menginput stok masuk hari ini untuk Anda. Data sudah terisi otomatis dan dikunci.</div>
+                    <div style="font-size:11px;color:#3b82f6;margin-top:6px;display:flex;align-items:center;gap:5px;"><i class="fa-solid fa-circle-info"></i> Jika ada kesalahan, Anda bisa meminta koreksi ke admin.</div>
+                    <div id="minta-edit-admin-wrap" style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                        <button id="btn-minta-edit-admin" onclick="mintaEditUlang()" style="display:inline-flex;align-items:center;gap:7px;background:#1d4ed8;color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 16px;font-family:var(--font);font-size:12px;font-weight:800;cursor:pointer;transition:background .15s;">
+                            <i class="fa-solid fa-pen-to-square"></i> Minta Koreksi ke Admin
+                        </button>
+                        <span id="edit-request-admin-sent-badge" style="display:none;align-items:center;gap:5px;background:var(--green-100);color:var(--green-700);font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;border:1px solid var(--green-200);">
+                            <i class="fa-solid fa-clock"></i> Permintaan terkirim — menunggu admin
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -1216,6 +1243,15 @@
                 <div>Tampilan stok produk Anda <strong>secara real-time</strong> langsung dari database POS. Stok berkurang otomatis setiap kali ada transaksi kasir manual maupun order online.</div>
             </div>
 
+            <!-- Info: Admin bisa update stok langsung -->
+            <div class="info-box" style="margin-bottom:14px;background:#fffbeb;border-color:var(--amber-200);">
+                <i class="fa-solid fa-handshake" style="margin-top:1px;flex-shrink:0;color:var(--amber-500);"></i>
+                <div style="font-size:12px;color:#92400e;">
+                    <strong>Stok dikelola oleh Admin Warunk Arsi.</strong> Admin dapat mengisi atau mengubah stok produk Anda langsung dari panel POS mereka. Perubahan akan muncul di sini secara otomatis tanpa perlu refresh.
+                    <span id="rt-last-admin-update" style="display:block;margin-top:3px;font-size:10px;color:#b45309;"></span>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
@@ -1437,13 +1473,30 @@ function doLogout() {
 
 /* ────────────────────────────────────────────────
    MINTA EDIT ULANG — update kolom edit_request di Supabase
-   lalu tampilkan notif ke admin di panel konsinyasi POS
+   lalu tampilkan notif ke admin di panel konsinyasi POS.
+   Mendukung 2 banner: amber (submit mitra) & biru (diinput admin).
 ──────────────────────────────────────────────── */
 async function mintaEditUlang() {
-    const btn = document.getElementById('btn-minta-edit');
-    if (!btn) return;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+    // Identifikasi tombol mana yang diklik (amber atau biru)
+    const btnAmber = document.getElementById('btn-minta-edit');
+    const btnBlue  = document.getElementById('btn-minta-edit-admin');
+    const badgeAmber = document.getElementById('edit-request-sent-badge');
+    const badgeBlue  = document.getElementById('edit-request-admin-sent-badge');
+
+    // Nonaktifkan kedua tombol agar tidak double-klik
+    const setLoading = (loading) => {
+        [btnAmber, btnBlue].forEach(btn => {
+            if (!btn) return;
+            btn.disabled = loading;
+            btn.innerHTML = loading
+                ? '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...'
+                : (btn.id === 'btn-minta-edit'
+                    ? '<i class="fa-solid fa-paper-plane"></i> Minta Edit Ulang ke Admin'
+                    : '<i class="fa-solid fa-pen-to-square"></i> Minta Koreksi ke Admin');
+        });
+    };
+
+    setLoading(true);
 
     try {
         const { error } = await sb
@@ -1454,20 +1507,35 @@ async function mintaEditUlang() {
 
         if (error) throw error;
 
-        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Permintaan Terkirim!';
-        btn.style.background = 'var(--green-600)';
-        showToast('Permintaan edit ulang dikirim ke admin.', 'green');
+        // Tampilkan badge "sudah terkirim" di kedua banner
+        _tampilEditRequestBadge(true);
 
-        // Reset tombol setelah 4 detik
-        setTimeout(() => {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Minta Edit Ulang ke Admin';
-            btn.style.background = 'var(--amber-600)';
-        }, 4000);
+        showToast('✅ Permintaan koreksi dikirim ke admin.', 'green');
     } catch (e) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Minta Edit Ulang ke Admin';
-        showToast('Gagal mengirim permintaan. Coba lagi.', 'red');
+        setLoading(false);
+        showToast('Gagal mengirim permintaan. Coba lagi.', 'amber');
+    }
+}
+
+/* Tampilkan atau sembunyikan badge "Permintaan terkirim" di kedua banner */
+function _tampilEditRequestBadge(show) {
+    const btnAmber   = document.getElementById('btn-minta-edit');
+    const btnBlue    = document.getElementById('btn-minta-edit-admin');
+    const badgeAmber = document.getElementById('edit-request-sent-badge');
+    const badgeBlue  = document.getElementById('edit-request-admin-sent-badge');
+
+    if (show) {
+        // Sembunyikan tombol, tampilkan badge
+        if (btnAmber) btnAmber.style.display = 'none';
+        if (btnBlue)  btnBlue.style.display  = 'none';
+        if (badgeAmber) badgeAmber.style.display = 'inline-flex';
+        if (badgeBlue)  badgeBlue.style.display  = 'inline-flex';
+    } else {
+        // Tampilkan tombol, sembunyikan badge
+        if (btnAmber) { btnAmber.style.display = 'inline-flex'; btnAmber.disabled = false; }
+        if (btnBlue)  { btnBlue.style.display  = 'inline-flex'; btnBlue.disabled  = false; }
+        if (badgeAmber) badgeAmber.style.display = 'none';
+        if (badgeBlue)  badgeBlue.style.display  = 'none';
     }
 }
 
@@ -1490,6 +1558,104 @@ async function initApp() {
     // Render form input
     await renderFormInput();
     await cekStatusHariIni();
+
+    // ── Realtime: dengarkan update stok dari Admin POS ──
+    setupAdminMenuSync();
+}
+
+
+/* ────────────────────────────────────────────────
+   REALTIME — Terima update dari Admin POS
+   Admin bisa edit stok/status menu mitra dari
+   panel "Kelola Menu" di POS → mitra melihatnya
+   langsung di tab "Stok Real-Time" tanpa refresh.
+──────────────────────────────────────────────── */
+let _adminMenuChannel     = null;
+let _adminKonsChannel     = null;
+
+function setupAdminMenuSync() {
+    if (_adminMenuChannel) return; // jangan subscribe ganda
+
+    const rawWA  = mitraData.wa;
+    const normWA = rawWA.replace(/\D/g, '');
+
+    _adminMenuChannel = sb.channel('mitra-admin-menu-sync-' + normWA)
+        .on('postgres_changes', {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'menu'
+        }, (payload) => {
+            const row = payload.new;
+            if (!row || !row.id) return;
+
+            // Cek apakah row ini milik mitra ini
+            const rWA = (row.mitra_wa || '').replace(/\D/g, '');
+            if (rWA !== normWA) return;
+
+            // Tampilkan notifikasi toast
+            const stokLabel = row.stok === 0 ? '🚫 Habis' : row.stok <= 5 ? `⚠ ${row.stok} pcs` : `✅ ${row.stok} pcs`;
+            showToast(`📦 Admin update ${row.nama}: ${stokLabel}`, 'green');
+
+            // Catat waktu terakhir update dari admin
+            const now = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
+            const lastEl = document.getElementById('rt-last-admin-update');
+            if (lastEl) lastEl.textContent = `Terakhir diupdate admin: ${now} — ${row.nama} → ${stokLabel}`;
+
+            // Jika tab realtime sedang aktif → refresh otomatis
+            const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '');
+            if (activeTab === 'realtime') {
+                loadRealtimeStok();
+            } else {
+                // Tunjukkan badge notifikasi di tab realtime
+                _tandaiTabRealtimeAdaUpdate();
+            }
+        })
+        .subscribe();
+
+    // ── Realtime: Admin input stok untuk mitra (INSERT ke konsinyasi_stok) ──
+    if (_adminKonsChannel) return;
+    _adminKonsChannel = sb.channel('mitra-admin-kons-sync-' + normWA)
+        .on('postgres_changes', {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'konsinyasi_stok'
+        }, async (payload) => {
+            const row = payload.new;
+            if (!row) return;
+
+            // Cek apakah record ini milik mitra ini & hari ini
+            const rowWA = (row.mitra_wa || '').replace(/\D/g, '');
+            if (rowWA !== normWA) return;
+            if (row.tanggal !== selectedDate) return;
+            if (!row.diinput_admin) return; // hanya proses jika memang diinput admin
+
+            // Tampilkan notifikasi
+            showToast('🛡️ Admin telah menginput stok hari ini. Form dikunci otomatis.', 'green');
+
+            // Refresh form dan status
+            await renderFormInput();
+            await cekStatusHariIni();
+        })
+        .subscribe();
+}
+
+/* Tanda bintang di tab Stok Real-Time jika ada update dari admin */
+function _tandaiTabRealtimeAdaUpdate() {
+    const tabEl = document.getElementById('tab-realtime');
+    const mobEl = document.getElementById('mob-tab-realtime');
+    if (tabEl && !tabEl.querySelector('.admin-sync-dot')) {
+        const dot = document.createElement('span');
+        dot.className = 'admin-sync-dot';
+        dot.style.cssText = 'display:inline-block;width:7px;height:7px;background:var(--amber-500);border-radius:50%;margin-left:5px;vertical-align:middle;animation:pulse-dot 1.2s infinite;';
+        tabEl.appendChild(dot);
+    }
+    if (mobEl && !mobEl.querySelector('.admin-sync-dot')) {
+        const dot2 = document.createElement('span');
+        dot2.className = 'admin-sync-dot';
+        dot2.style.cssText = 'display:inline-block;width:6px;height:6px;background:var(--amber-500);border-radius:50%;position:absolute;top:4px;right:4px;animation:pulse-dot 1.2s infinite;';
+        mobEl.style.position = 'relative';
+        mobEl.appendChild(dot2);
+    }
 }
 
 function updateDateDisplay() {
@@ -1499,6 +1665,7 @@ function updateDateDisplay() {
 async function gantiTanggal() {
     selectedDate = document.getElementById('tanggal-filter').value;
     updateDateDisplay();
+    await renderFormInput();
     await cekStatusHariIni();
     // Refresh panel aktif
     const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '');
@@ -1506,9 +1673,8 @@ async function gantiTanggal() {
     if (activeTab === 'riwayat') await fetchRiwayat();
 }
 
-/* ────────────────────────────────────────────────
-   TABS
-──────────────────────────────────────────────── */
+/* Hapus dot saat tab realtime dibuka */
+
 function switchTab(tab) {
     ['input', 'laporan', 'riwayat', 'realtime', 'flashsale'].forEach(t => {
         document.getElementById(`tab-${t}`).classList.toggle('active', t === tab);
@@ -1524,7 +1690,11 @@ function switchTab(tab) {
     if (barFlash && tab !== 'flashsale') barFlash.style.display = 'none';
     if (tab === 'laporan') loadLaporan();
     if (tab === 'riwayat') fetchRiwayat();
-    if (tab === 'realtime') loadRealtimeStok();
+    if (tab === 'realtime') {
+        loadRealtimeStok();
+        // Hapus notif dot dari admin update
+        document.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
+    }
     if (tab === 'flashsale') loadFlashSale();
 }
 
@@ -1840,45 +2010,69 @@ async function saveFlashSale() {
 async function cekStatusHariIni() {
     const { data } = await sb
         .from('konsinyasi_stok')
-        .select('id, status, edit_unlocked')
+        .select('id, status, edit_unlocked, diinput_admin, edit_request')
         .eq('mitra_wa', mitraData.wa)
         .eq('tanggal', selectedDate)
         .maybeSingle();
 
-    const badge = document.getElementById('stok-status-badge');
-    const btnSubmit = document.getElementById('btn-submit-stok');
+    const badge       = document.getElementById('stok-status-badge');
+    const btnSubmit   = document.getElementById('btn-submit-stok');
+    const adminBanner = document.getElementById('input-admin-banner');
+    const lockBanner  = document.getElementById('input-lock-banner');
+
+    // Reset semua banner & badge request
+    if (adminBanner) adminBanner.style.display = 'none';
+    if (lockBanner)  lockBanner.style.display  = 'none';
+    _tampilEditRequestBadge(false);
 
     if (data) {
-        const isUnlocked = data.edit_unlocked === true;
+        const isAdminInput   = data.diinput_admin === true;
+        const isUnlocked     = data.edit_unlocked === true;
+        const alreadyRequested = data.edit_request === true;
 
         if (isUnlocked) {
-            // Admin sudah beri izin edit ulang
+            // Admin beri izin edit ulang — form terbuka, badge request disembunyikan
             badge.className = 'status-badge draft';
             badge.innerHTML = '<i class="fa-solid fa-lock-open"></i> Diizinkan Edit oleh Admin';
             badge.style.background = 'var(--amber-100)';
-            badge.style.color = 'var(--amber-600)';
+            badge.style.color      = 'var(--amber-600)';
             setFormLocked(false);
             if (btnSubmit) {
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Ulang Stok';
             }
+        } else if (isAdminInput) {
+            // Diinput admin — tampilkan badge biru & banner biru
+            badge.className = 'status-badge submitted';
+            badge.innerHTML = '<i class="fa-solid fa-user-shield"></i> Stok Diinput Admin';
+            badge.style.background = '#dbeafe';
+            badge.style.color      = '#1d4ed8';
+            setFormLocked(true, 'admin');
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = '<i class="fa-solid fa-lock"></i> Diinput oleh Admin';
+            }
+            // Jika sudah pernah minta koreksi, tampilkan badge
+            if (alreadyRequested) _tampilEditRequestBadge(true);
         } else {
-            // Sudah submit & terkunci
+            // Mitra sudah submit sendiri
             badge.className = 'status-badge submitted';
             badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> Stok Sudah Disubmit';
             badge.style.background = '';
-            badge.style.color = '';
-            setFormLocked(true);
+            badge.style.color      = '';
+            setFormLocked(true, 'mitra');
             if (btnSubmit) {
                 btnSubmit.disabled = true;
                 btnSubmit.innerHTML = '<i class="fa-solid fa-lock"></i> Sudah Disubmit';
             }
+            // Jika sudah pernah minta edit ulang, tampilkan badge
+            if (alreadyRequested) _tampilEditRequestBadge(true);
         }
     } else {
         badge.className = 'status-badge draft';
         badge.innerHTML = '<i class="fa-solid fa-circle-dot"></i> Belum Input Stok';
         badge.style.background = '';
-        badge.style.color = '';
+        badge.style.color      = '';
         setFormLocked(false);
         if (btnSubmit) {
             btnSubmit.disabled = false;
@@ -1887,33 +2081,38 @@ async function cekStatusHariIni() {
     }
 }
 
-/* Kunci / buka form input stok */
-function setFormLocked(locked) {
-    const lockBanner = document.getElementById('input-lock-banner');
-    const stokWrap   = document.getElementById('stok-table-wrap');
-    const resetBtn   = document.querySelector('[onclick="resetForm()"]');
-    const btnSubmit  = document.getElementById('btn-submit-stok');
+/* Kunci / buka form input stok
+   mode: 'mitra' = banner kuning (sudah submit)
+         'admin' = banner biru (diinput admin)
+         null    = buka kunci
+*/
+function setFormLocked(locked, mode) {
+    const lockBanner  = document.getElementById('input-lock-banner');
+    const adminBanner = document.getElementById('input-admin-banner');
+    const resetBtn    = document.querySelector('[onclick="resetForm()"]');
 
-    if (lockBanner) lockBanner.style.display = locked ? 'flex' : 'none';
+    if (lockBanner)  lockBanner.style.display  = (locked && mode !== 'admin') ? 'flex' : 'none';
+    if (adminBanner) adminBanner.style.display  = (locked && mode === 'admin') ? 'flex' : 'none';
 
-    // Disable semua qty-input dan qty-btn
     document.querySelectorAll('.qty-input, .qty-btn').forEach(el => {
-        el.disabled = locked;
+        el.disabled      = locked;
         el.style.opacity = locked ? '0.45' : '';
         el.style.cursor  = locked ? 'not-allowed' : '';
     });
 
     if (resetBtn) {
-        resetBtn.disabled = locked;
+        resetBtn.disabled      = locked;
         resetBtn.style.opacity = locked ? '0.45' : '';
     }
 }
 
 /* ────────────────────────────────────────────────
    RENDER FORM INPUT — Card List (Mobile-Friendly)
+   Setelah render, langsung terapkan lock state
+   berdasarkan data laporan hari ini.
 ──────────────────────────────────────────────── */
 async function renderFormInput() {
-    const wrap   = document.getElementById('stok-table-wrap');
+    const wrap    = document.getElementById('stok-table-wrap');
     const emptyEl = document.getElementById('input-empty');
     const loadEl  = document.getElementById('input-loading');
     const footer  = document.getElementById('stok-footer');
@@ -1922,7 +2121,7 @@ async function renderFormInput() {
     wrap.style.display = 'none';
     emptyEl.classList.add('hidden');
 
-    // Ambil data terbaru produk mitra dari DB
+    // Ambil produk mitra
     const { data: prods } = await sb
         .from('menu')
         .select('id, nama, harga_beli, gambar_url, mitra_wa, mitra_nama')
@@ -1938,7 +2137,7 @@ async function renderFormInput() {
 
     produkMitra = prods;
 
-    // Cek apakah ada laporan hari ini untuk pre-fill
+    // Ambil laporan hari ini (pre-fill + cek status lock)
     const { data: laporanHariIni } = await sb
         .from('konsinyasi_stok')
         .select('*')
@@ -1948,11 +2147,23 @@ async function renderFormInput() {
 
     const existingDetail = laporanHariIni?.detail || [];
 
+    // Tentukan apakah form harus dikunci SEBELUM render elemen.
+    // Kunci jika ada record hari ini dan belum di-unlock admin.
+    // diinput_admin bersifat opsional (kolom mungkin belum ada di DB).
+    const isAdminInput = laporanHariIni?.diinput_admin === true;
+    const isUnlocked   = laporanHariIni?.edit_unlocked === true;
+    const shouldLock   = !!laporanHariIni && !isUnlocked;
+    const lockMode     = (isAdminInput && !isUnlocked) ? 'admin' : 'mitra';
+
     const listEl = document.getElementById('stok-tbody');
     listEl.innerHTML = produkMitra.map(p => {
-        const existing = existingDetail.find(d => d.menu_id === p.id);
+        const existing  = existingDetail.find(d => d.menu_id === p.id);
         const stokMasuk = existing ? existing.stok_masuk : 0;
-        const hpp = p.harga_beli || 0;
+        const hpp       = p.harga_beli || 0;
+
+        // Terapkan disabled langsung di HTML saat render jika terkunci
+        const disabledAttr = shouldLock ? 'disabled' : '';
+        const opacityStyle = shouldLock ? 'opacity:0.45;cursor:not-allowed;' : '';
 
         return `
         <div class="stok-card" id="card-${p.id}">
@@ -1964,10 +2175,10 @@ async function renderFormInput() {
             <div class="stok-card-ctrl">
                 <div class="stok-card-ctrl-label">Stok Masuk</div>
                 <div class="qty-ctrl">
-                    <button class="qty-btn" onclick="adjQty('masuk-${p.id}', -1)">−</button>
+                    <button class="qty-btn" onclick="adjQty('masuk-${p.id}', -1)" ${disabledAttr} style="${opacityStyle}">−</button>
                     <input type="number" id="masuk-${p.id}" class="qty-input" value="${stokMasuk}" min="0"
-                        oninput="hitungRow('${p.id}')" inputmode="numeric">
-                    <button class="qty-btn" onclick="adjQty('masuk-${p.id}', 1)">+</button>
+                        oninput="hitungRow('${p.id}')" inputmode="numeric" ${disabledAttr} style="${opacityStyle}">
+                    <button class="qty-btn" onclick="adjQty('masuk-${p.id}', 1)" ${disabledAttr} style="${opacityStyle}">+</button>
                 </div>
             </div>
         </div>`;
@@ -1977,6 +2188,9 @@ async function renderFormInput() {
     if (footer) footer.style.display = '';
     updateFooter();
     updateStatCards();
+
+    // Terapkan lock state ke UI lainnya (banner, reset btn, submit btn)
+    // cekStatusHariIni() akan dipanggil setelah ini untuk badge & banner
 }
 
 /* ────────────────────────────────────────────────
@@ -2461,7 +2675,14 @@ ALTER TABLE menu ADD COLUMN IF NOT EXISTS flash_sale_mulai time DEFAULT NULL;
 ALTER TABLE menu ADD COLUMN IF NOT EXISTS flash_sale_selesai time DEFAULT NULL;
 
 -- Tambah kolom is_verified (untuk status verifikasi admin):
-ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS is_verified boolean DEFAULT false;`;
+ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS is_verified boolean DEFAULT false;
+
+-- Tambah kolom diinput_admin (fitur admin input stok untuk mitra):
+ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS diinput_admin boolean DEFAULT false;
+
+-- Tambah kolom request edit ulang (mitra minta koreksi ke admin):
+ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS edit_request boolean DEFAULT false;
+ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS edit_request_at timestamptz DEFAULT NULL;`;
 
     alert('PANDUAN: Tabel belum ada!\n\nJalankan SQL berikut di Supabase → SQL Editor:\n\n' + sql);
 }
