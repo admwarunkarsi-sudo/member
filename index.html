@@ -1612,7 +1612,7 @@ function setupAdminMenuSync() {
         })
         .subscribe();
 
-    // ── Realtime: Admin input stok untuk mitra (INSERT ke konsinyasi_stok) ──
+    // ── Realtime: Admin input stok untuk mitra (INSERT + UPDATE ke konsinyasi_stok) ──
     if (_adminKonsChannel) return;
     _adminKonsChannel = sb.channel('mitra-admin-kons-sync-' + normWA)
         .on('postgres_changes', {
@@ -1622,17 +1622,30 @@ function setupAdminMenuSync() {
         }, async (payload) => {
             const row = payload.new;
             if (!row) return;
-
-            // Cek apakah record ini milik mitra ini & hari ini
+            // Normalisasi kedua sisi agar format berbeda (62xxx vs 08xxx) tetap cocok
             const rowWA = (row.mitra_wa || '').replace(/\D/g, '');
             if (rowWA !== normWA) return;
             if (row.tanggal !== selectedDate) return;
-            if (!row.diinput_admin) return; // hanya proses jika memang diinput admin
+            if (!row.diinput_admin) return;
 
-            // Tampilkan notifikasi
             showToast('🛡️ Admin telah menginput stok hari ini. Form dikunci otomatis.', 'green');
+            await renderFormInput();
+            await cekStatusHariIni();
+        })
+        .on('postgres_changes', {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'konsinyasi_stok'
+        }, async (payload) => {
+            const row = payload.new;
+            if (!row) return;
+            // Hanya proses jika UPDATE ini mengaktifkan diinput_admin
+            if (!row.diinput_admin) return;
+            const rowWA = (row.mitra_wa || '').replace(/\D/g, '');
+            if (rowWA !== normWA) return;
+            if (row.tanggal !== selectedDate) return;
 
-            // Refresh form dan status
+            showToast('🛡️ Admin memperbarui stok via Kelola Menu. Form dikunci otomatis.', 'green');
             await renderFormInput();
             await cekStatusHariIni();
         })
