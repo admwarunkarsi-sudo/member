@@ -1573,89 +1573,172 @@ async function initApp() {
 let _adminMenuChannel     = null;
 let _adminKonsChannel     = null;
 
+function _waMatch(waA, waB) {
+    // Bandingkan dua nomor WA dengan normalisasi penuh agar 08xxx == 628xxx
+    if (!waA || !waB) return false;
+    const norm = w => {
+        let n = (w + '').replace(/[\s\-().]/g, '');
+        if (n.startsWith('0')) n = '62' + n.slice(1);
+        if (!n.startsWith('62')) n = '62' + n;
+        return n;
+    };
+    return norm(waA) === norm(waB);
+}
+
 function setupAdminMenuSync() {
-    if (_adminMenuChannel) return; // jangan subscribe ganda
-
+    // Jangan subscribe ganda — tapi tetap setup channel yang belum ada
     const rawWA  = mitraData.wa;
-    const normWA = rawWA.replace(/\D/g, '');
+    // Normalisasi konsisten: hapus non-digit, lalu standarkan ke 62xxx
+    let normWA = rawWA.replace(/[\s\-().]/g, '');
+    if (normWA.startsWith('0')) normWA = '62' + normWA.slice(1);
+    if (!normWA.startsWith('62')) normWA = '62' + normWA;
 
-    _adminMenuChannel = sb.channel('mitra-admin-menu-sync-' + normWA)
-        .on('postgres_changes', {
-            event: 'UPDATE',
-            schema: 'public',
-            table: 'menu'
-        }, (payload) => {
-            const row = payload.new;
-            if (!row || !row.id) return;
+    // ── Channel 1: Realtime update stok/status menu dari Admin POS ──
+    if (!_adminMenuChannel) {
+        _adminMenuChannel = sb.channel('mitra-admin-menu-sync-' + normWA)
+            .on('postgres_changes', {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'menu'
+            }, async (payload) => {
+                const row = payload.new;
+                if (!row || !row.id) return;
 
-            // Cek apakah row ini milik mitra ini
-            const rWA = (row.mitra_wa || '').replace(/\D/g, '');
-            if (rWA !== normWA) return;
+                // Cocokkan WA dengan normalisasi penuh agar format 08xxx / 62xxx / +62xxx semuanya cocok
+                if (!_waMatch(row.mitra_wa, normWA)) return;
 
-            // Tampilkan notifikasi toast
-            const stokLabel = row.stok === 0 ? '🚫 Habis' : row.stok <= 5 ? `⚠ ${row.stok} pcs` : `✅ ${row.stok} pcs`;
-            showToast(`📦 Admin update ${row.nama}: ${stokLabel}`, 'green');
+                // Tampilkan notifikasi toast
+                const stokNum   = parseInt(row.stok) || 0;
+                const stokLabel = stokNum === 0 ? '🚫 Habis' : stokNum <= 5 ? `⚠ ${stokNum} pcs` : `✅ ${stokNum} pcs`;
+                showToast(`📦 Admin update ${row.nama}: ${stokLabel}`, 'green');
 
-            // Catat waktu terakhir update dari admin
-            const now = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
-            const lastEl = document.getElementById('rt-last-admin-update');
-            if (lastEl) lastEl.textContent = `Terakhir diupdate admin: ${now} — ${row.nama} → ${stokLabel}`;
+                // Catat waktu terakhir update dari admin
+                const now    = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
+                const lastEl = document.getElementById('rt-last-admin-update');
+                if (lastEl) lastEl.textContent = `Terakhir diupdate admin: ${now} — ${row.nama} → ${stokLabel}`;
 
-            // Jika tab realtime sedang aktif → refresh otomatis
-            const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '');
-            if (activeTab === 'realtime') {
-                loadRealtimeStok();
-            } else {
-                // Tunjukkan badge notifikasi di tab realtime
-                _tandaiTabRealtimeAdaUpdate();
-            }
-        })
-        .subscribe();
+                // Refresh tab yang sedang aktif secara otomatis
+                const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '');
+                if (activeTab === 'realtime') {
+                    loadRealtimeStok();
+                } else if (activeTab === 'input') {
+                    // Refresh form input agar stok terbaru dari admin tampil
+                    await renderFormInput();
+                    await cekStatusHariIni();
+                } else if (activeTab === 'laporan') {
+                    await loadLaporan();
+                } else if (activeTab === 'riwayat') {
+                    await fetchRiwayat();
+                }
+                // Selalu tandai tab realtime ada update (kecuali jika sedang di sana)
+                if (activeTab !== 'realtime') {
+                    _tandaiTabRealtimeAdaUpdate();
+                }
+            })
+            .subscribe((status, err) => {
+                if (err) console.warn('[mitra] menu channel error:', err);
+            });
+    }
 
-    // ── Realtime: Admin input stok untuk mitra (INSERT + UPDATE ke konsinyasi_stok) ──
-    if (_adminKonsChannel) return;
-    _adminKonsChannel = sb.channel('mitra-admin-kons-sync-' + normWA)
-        .on('postgres_changes', {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'konsinyasi_stok'
-        }, async (payload) => {
-            const row = payload.new;
-            if (!row) return;
-            // Normalisasi kedua sisi agar format berbeda (62xxx vs 08xxx) tetap cocok
-            const rowWA = (row.mitra_wa || '').replace(/\D/g, '');
-            if (rowWA !== normWA) return;
-            if (row.tanggal !== selectedDate) return;
-            if (!row.diinput_admin) return;
+    // ── Channel 2: Admin INSERT/UPDATE konsinyasi_stok untuk mitra ini ──
+    if (!_adminKonsChannel) {
+        _adminKonsChannel = sb.channel('mitra-admin-kons-sync-' + normWA)
+            .on('postgres_changes', {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'konsinyasi_stok'
+            }, async (payload) => {
+                const row = payload.new;
+                if (!row) return;
+                if (!_waMatch(row.mitra_wa, normWA)) return;
+                if (row.tanggal !== selectedDate) return;
 
-            showToast('🛡️ Admin telah menginput stok hari ini. Form dikunci otomatis.', 'green');
-            await renderFormInput();
-            await cekStatusHariIni();
-        })
-        .on('postgres_changes', {
-            event: 'UPDATE',
-            schema: 'public',
-            table: 'konsinyasi_stok'
-        }, async (payload) => {
-            const row = payload.new;
-            if (!row) return;
-            // Hanya proses jika UPDATE ini mengaktifkan diinput_admin
-            if (!row.diinput_admin) return;
-            const rowWA = (row.mitra_wa || '').replace(/\D/g, '');
-            if (rowWA !== normWA) return;
-            if (row.tanggal !== selectedDate) return;
+                // Jika INSERT ini bukan dari admin (mitra submit sendiri), abaikan
+                // karena submitStokHarian sudah handle UI-nya sendiri
+                if (!row.diinput_admin) return;
 
-            showToast('🛡️ Admin memperbarui stok via Kelola Menu. Form dikunci otomatis.', 'green');
-            await renderFormInput();
-            await cekStatusHariIni();
-        })
-        .subscribe();
+                const pesan = '🛡️ Admin telah menginput stok hari ini. Form dikunci otomatis.';
+                showToast(pesan, 'green');
+
+                await renderFormInput();
+                await cekStatusHariIni();
+
+                const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '');
+                if (activeTab === 'laporan') {
+                    await loadLaporan();
+                } else {
+                    _tandaiTabAdaUpdate('laporan');
+                }
+                if (activeTab === 'riwayat') {
+                    await fetchRiwayat();
+                } else {
+                    _tandaiTabAdaUpdate('riwayat');
+                }
+            })
+            .on('postgres_changes', {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'konsinyasi_stok'
+            }, async (payload) => {
+                const row = payload.new;
+                const old = payload.old;
+                if (!row) return;
+                if (!_waMatch(row.mitra_wa, normWA)) return;
+                if (row.tanggal !== selectedDate) return;
+
+                // Jika mitra sedang edit (edit_unlocked=true) DAN update ini adalah
+                // dari _syncKonsinyasiStok POS (diinput_admin=true), SKIP — POS
+                // seharusnya sudah skip juga, tapi sebagai double-guard di sisi mitra
+                if (row.edit_unlocked === true && row.diinput_admin === true) return;
+
+                // Tentukan pesan yang tepat berdasarkan perubahan yang terjadi
+                let pesan;
+                if (row.edit_unlocked === true && !old?.edit_unlocked) {
+                    // Admin baru saja beri izin edit
+                    pesan = '🔓 Admin mengizinkan Anda mengedit stok kembali.';
+                } else if (row.edit_unlocked === false && old?.edit_unlocked === true) {
+                    // Admin cabut izin edit (jarang, tapi mungkin)
+                    pesan = '🔒 Izin edit dicabut oleh admin.';
+                } else if (row.is_verified === true && !old?.is_verified) {
+                    pesan = '✅ Admin telah memverifikasi laporan Anda!';
+                } else if (row.diinput_admin === true) {
+                    pesan = '🛡️ Admin memperbarui data stok Anda.';
+                } else {
+                    // Update dari mitra sendiri (submit ulang) — tidak perlu toast
+                    return;
+                }
+                showToast(pesan, 'green');
+
+                await renderFormInput();
+                await cekStatusHariIni();
+
+                const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '');
+                if (activeTab === 'laporan') {
+                    await loadLaporan();
+                } else {
+                    _tandaiTabAdaUpdate('laporan');
+                }
+                if (activeTab === 'riwayat') {
+                    await fetchRiwayat();
+                } else {
+                    _tandaiTabAdaUpdate('riwayat');
+                }
+            })
+            .subscribe((status, err) => {
+                if (err) console.warn('[mitra] konsinyasi channel error:', err);
+            });
+    }
 }
 
 /* Tanda bintang di tab Stok Real-Time jika ada update dari admin */
 function _tandaiTabRealtimeAdaUpdate() {
-    const tabEl = document.getElementById('tab-realtime');
-    const mobEl = document.getElementById('mob-tab-realtime');
+    _tandaiTabAdaUpdate('realtime');
+}
+
+/* Tandai tab dengan dot notifikasi saat ada update dari admin */
+function _tandaiTabAdaUpdate(tabId) {
+    const tabEl = document.getElementById('tab-' + tabId);
+    const mobEl = document.getElementById('mob-tab-' + tabId);
     if (tabEl && !tabEl.querySelector('.admin-sync-dot')) {
         const dot = document.createElement('span');
         dot.className = 'admin-sync-dot';
@@ -1703,12 +1786,14 @@ function switchTab(tab) {
     if (barFlash && tab !== 'flashsale') barFlash.style.display = 'none';
     if (tab === 'laporan') loadLaporan();
     if (tab === 'riwayat') fetchRiwayat();
-    if (tab === 'realtime') {
-        loadRealtimeStok();
-        // Hapus notif dot dari admin update
-        document.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
-    }
+    if (tab === 'realtime') loadRealtimeStok();
     if (tab === 'flashsale') loadFlashSale();
+
+    // Hapus dot notifikasi admin dari tab yang baru dibuka
+    const openedTab    = document.getElementById('tab-' + tab);
+    const openedMobTab = document.getElementById('mob-tab-' + tab);
+    if (openedTab)    openedTab.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
+    if (openedMobTab) openedMobTab.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
 }
 
 /* ────────────────────────────────────────────────
@@ -2134,10 +2219,10 @@ async function renderFormInput() {
     wrap.style.display = 'none';
     emptyEl.classList.add('hidden');
 
-    // Ambil produk mitra
+    // Ambil produk mitra (termasuk stok terkini dari POS sebagai nilai referensi)
     const { data: prods } = await sb
         .from('menu')
-        .select('id, nama, harga_beli, gambar_url, mitra_wa, mitra_nama')
+        .select('id, nama, harga_beli, gambar_url, mitra_wa, mitra_nama, stok')
         .eq('mitra_wa', mitraData.wa)
         .order('id', { ascending: true });
 
@@ -2162,21 +2247,41 @@ async function renderFormInput() {
 
     // Tentukan apakah form harus dikunci SEBELUM render elemen.
     // Kunci jika ada record hari ini dan belum di-unlock admin.
-    // diinput_admin bersifat opsional (kolom mungkin belum ada di DB).
     const isAdminInput = laporanHariIni?.diinput_admin === true;
     const isUnlocked   = laporanHariIni?.edit_unlocked === true;
     const shouldLock   = !!laporanHariIni && !isUnlocked;
     const lockMode     = (isAdminInput && !isUnlocked) ? 'admin' : 'mitra';
 
+    // Simpan nilai yang sudah diketik mitra (belum disubmit) agar tidak hilang saat auto-refresh
+    const nilaiMitraSaatIni = {};
+    produkMitra.forEach(p => {
+        const inputEl = document.getElementById(`masuk-${p.id}`);
+        if (inputEl && inputEl.classList.contains('changed')) {
+            // Ada perubahan yang belum disubmit — pertahankan nilainya
+            nilaiMitraSaatIni[p.id] = inputEl.value;
+        }
+    });
+
     const listEl = document.getElementById('stok-tbody');
     listEl.innerHTML = produkMitra.map(p => {
         const existing  = existingDetail.find(d => d.menu_id === p.id);
-        const stokMasuk = existing ? existing.stok_masuk : 0;
+        // Prioritas nilai form:
+        // (1) Nilai yang sedang diketik mitra (belum submit) — pertahankan
+        // (2) Nilai dari konsinyasi_stok.detail (sudah pernah submit/diinput admin)
+        // (3) Nilai menu.stok dari POS (admin update via Simpan/Sinkron tapi belum ada konsinyasi)
+        // (4) 0 sebagai default
+        const stokMasuk = (p.id in nilaiMitraSaatIni)
+            ? nilaiMitraSaatIni[p.id]
+            : existing
+                ? existing.stok_masuk
+                : (parseInt(p.stok) || 0);
         const hpp       = p.harga_beli || 0;
 
         // Terapkan disabled langsung di HTML saat render jika terkunci
         const disabledAttr = shouldLock ? 'disabled' : '';
         const opacityStyle = shouldLock ? 'opacity:0.45;cursor:not-allowed;' : '';
+        // Tandai sebagai changed jika nilai dipertahankan dari input mitra
+        const changedClass = (p.id in nilaiMitraSaatIni) ? ' changed' : '';
 
         return `
         <div class="stok-card" id="card-${p.id}">
@@ -2189,7 +2294,7 @@ async function renderFormInput() {
                 <div class="stok-card-ctrl-label">Stok Masuk</div>
                 <div class="qty-ctrl">
                     <button class="qty-btn" onclick="adjQty('masuk-${p.id}', -1)" ${disabledAttr} style="${opacityStyle}">−</button>
-                    <input type="number" id="masuk-${p.id}" class="qty-input" value="${stokMasuk}" min="0"
+                    <input type="number" id="masuk-${p.id}" class="qty-input${changedClass}" value="${stokMasuk}" min="0"
                         oninput="hitungRow('${p.id}')" inputmode="numeric" ${disabledAttr} style="${opacityStyle}">
                     <button class="qty-btn" onclick="adjQty('masuk-${p.id}', 1)" ${disabledAttr} style="${opacityStyle}">+</button>
                 </div>
@@ -2308,7 +2413,9 @@ async function submitStokHarian() {
         total_bayar:    detail.reduce((s, d) => s + d.subtotal, 0),
         detail:         detail,
         status:         'submitted',
+        diinput_admin:  false,   // mitra yang submit → bukan admin
         edit_unlocked:  false,   // kunci kembali setelah submit/submit-ulang
+        edit_request:   false,   // reset permintaan koreksi setelah submit ulang
         updated_at:     new Date().toISOString()
     };
 
@@ -2319,14 +2426,6 @@ async function submitStokHarian() {
         .eq('mitra_wa', mitraData.wa)
         .eq('tanggal', selectedDate)
         .maybeSingle();
-
-    // Map stok_masuk lama (sebelum edit) per menu_id, untuk hitung delta
-    const masukLamaMap = {};
-    if (existing && Array.isArray(existing.detail)) {
-        existing.detail.forEach(d => {
-            masukLamaMap[d.menu_id] = parseInt(d.stok_masuk) || 0;
-        });
-    }
 
     let err;
     if (existing) {
@@ -2353,17 +2452,19 @@ async function submitStokHarian() {
 
     showToast('✅ Stok hari ini berhasil disimpan!');
 
-    // Sinkron stok masuk ke tabel menu (stok di POS) — pakai DELTA, bukan akumulasi penuh
+    // Sinkron stok masuk ke tabel menu (stok di POS)
+    // Aturan:
+    //   - Hanya update menu.stok untuk produk yang DIINPUT mitra (stok_masuk > 0)
+    //   - Produk dengan stok_masuk=0 TIDAK menimpa menu.stok yang sudah ada di POS
+    //     (bisa jadi admin sudah set stok via POS, atau memang belum dititipkan hari ini)
+    //   - Jika stok_masuk > 0 → set is_tersedia=true agar produk muncul di kasir
     for (const d of detail) {
-        const masukLama = masukLamaMap[d.menu_id] || 0;
-        const delta = (parseInt(d.stok_masuk) || 0) - masukLama;
-
-        if (delta !== 0) {
-            const { data: menuCur } = await sb.from('menu').select('stok').eq('id', d.menu_id).maybeSingle();
-            const stokSaatIni = (menuCur && menuCur.stok !== null) ? parseInt(menuCur.stok) || 0 : 0;
-            const stokBaru = Math.max(0, stokSaatIni + delta); // jaga-jaga jangan sampai negatif
-            await sb.from('menu').update({ stok: stokBaru }).eq('id', d.menu_id);
+        const stokBaru = parseInt(d.stok_masuk) || 0;
+        if (stokBaru > 0) {
+            // Ada stok dititipkan → update stok dan pastikan is_tersedia=true
+            await sb.from('menu').update({ stok: stokBaru, is_tersedia: true }).eq('id', d.menu_id);
         }
+        // stokBaru=0 → tidak update menu sama sekali, biarkan nilai POS tetap
     }
 
     await cekStatusHariIni();
