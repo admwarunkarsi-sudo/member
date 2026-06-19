@@ -1363,8 +1363,7 @@ let currentLaporanData = null;
    UTILS
 ──────────────────────────────────────────────── */
 function todayStr() {
-    const d = new Date();
-    return d.toISOString().slice(0, 10);
+    return new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 10);
 }
 
 function formatRp(n) {
