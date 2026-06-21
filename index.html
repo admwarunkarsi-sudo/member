@@ -2494,12 +2494,32 @@ async function hitungDetailRealtime(detail) {
     (liveRows || []).forEach(r => { stokMap[r.id] = r.stok; });
 
     return list.map(d => {
+        // Stok masuk ("stok awal") SELALU dipertahankan apa adanya — tidak pernah
+        // ditimpa oleh perhitungan ini. Inilah angka In yang harus tetap terekam.
         const masuk   = parseInt(d.stok_masuk) || 0;
+        const retur   = parseInt(d.retur) || 0;
+        const harga   = parseInt(d.harga_beli) || 0;
+
         const sisaRaw = stokMap[d.menu_id];
         // sisa stok tidak ditemukan / unlimited (null) -> anggap belum ada penjualan
         const sisa    = (sisaRaw === null || sisaRaw === undefined) ? masuk : (parseInt(sisaRaw) || 0);
-        const terjual = Math.max(0, Math.min(masuk, masuk - sisa));
-        return { ...d, terjual };
+
+        // Basis yang bisa terjual = masuk − retur (barang diretur ditarik kembali,
+        // tidak boleh pernah dihitung sebagai terjual).
+        const sellable = Math.max(0, masuk - retur);
+
+        // Terjual riil = barang yang benar-benar keluar lewat kasir/online.
+        //   terjual = (masuk − retur) − sisa, dibatasi 0..sellable
+        // Jika retur belum diinput admin (retur=0) rumus ini otomatis turun ke
+        // perilaku lama (masuk − sisa), jadi tetap real-time tanpa verifikasi.
+        const terjual = Math.max(0, Math.min(sellable, sellable - sisa));
+
+        // subtotal tagihan ikut terjual riil supaya kolom uang konsisten dgn In/Retur/Terjual
+        const subtotal = terjual * harga;
+
+        // Pertahankan SEMUA field asli (termasuk stok_masuk & retur) — hanya
+        // perbarui terjual & subtotal. Ini menjaga jejak In–Retur–Terjual utuh.
+        return { ...d, stok_masuk: masuk, retur, terjual, subtotal };
     });
 }
 
