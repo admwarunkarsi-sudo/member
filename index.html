@@ -2471,6 +2471,39 @@ async function submitStokHarian() {
 }
 
 /* ────────────────────────────────────────────────
+   REALTIME TERJUAL
+   Terjual = Stok Masuk − Sisa Stok saat ini (menu.stok).
+   menu.stok otomatis berkurang setiap ada transaksi di
+   kasir manual maupun kasir online (lihat juga tab
+   "Stok Real-Time"), jadi nilainya selalu real-time
+   tanpa perlu menunggu verifikasi admin.
+   Hanya berlaku utk tanggal HARI INI — tanggal lampau
+   memakai angka final yang sudah tersimpan di database.
+──────────────────────────────────────────────── */
+async function hitungDetailRealtime(detail) {
+    const list = detail || [];
+    if (list.length === 0) return list;
+
+    const menuIds = list.map(d => d.menu_id);
+    const { data: liveRows } = await sb
+        .from('menu')
+        .select('id, stok')
+        .in('id', menuIds);
+
+    const stokMap = {};
+    (liveRows || []).forEach(r => { stokMap[r.id] = r.stok; });
+
+    return list.map(d => {
+        const masuk   = parseInt(d.stok_masuk) || 0;
+        const sisaRaw = stokMap[d.menu_id];
+        // sisa stok tidak ditemukan / unlimited (null) -> anggap belum ada penjualan
+        const sisa    = (sisaRaw === null || sisaRaw === undefined) ? masuk : (parseInt(sisaRaw) || 0);
+        const terjual = Math.max(0, Math.min(masuk, masuk - sisa));
+        return { ...d, terjual };
+    });
+}
+
+/* ────────────────────────────────────────────────
    LAPORAN HARIAN
 ──────────────────────────────────────────────── */
 async function loadLaporan() {
@@ -2497,51 +2530,61 @@ async function loadLaporan() {
     }
 
     currentLaporanData = data;
-    renderLaporan(data);
+    await renderLaporan(data);
     contentEl.classList.remove('hidden');
 }
 
-function renderLaporan(data) {
-    const detail = data.detail || [];
+async function renderLaporan(data) {
     const isVerified = data.is_verified === true;
     const isPaid = data.is_paid === true;
+    const isToday = data.tanggal === todayStr();
+
+    // Terjual & Laku dihitung realtime hanya utk hari ini.
+    // Tanggal lampau memakai detail yang sudah tersimpan (final).
+    let detail = data.detail || [];
+    if (isToday) {
+        detail = await hitungDetailRealtime(detail);
+        data.detail = detail; // sinkronkan agar export CSV ikut realtime
+    }
+
+    const totalTerjual = detail.reduce((s, d) => s + (parseInt(d.terjual) || 0), 0);
+    const totalMasukHariIni = detail.reduce((s, d) => s + (parseInt(d.stok_masuk) || 0), 0);
+    if (isToday) data.total_terjual = totalTerjual;
 
     // Stat cards
     document.getElementById('lap-stat-masuk').textContent   = data.total_masuk || 0;
     document.getElementById('lap-stat-retur').textContent   = isVerified ? (data.total_retur || 0) : '—';
-    document.getElementById('lap-stat-terjual').textContent = isVerified ? (data.total_terjual || 0) : 'Pending';
-    const lakuPct = (isVerified && data.total_masuk > 0)
-        ? Math.round((data.total_terjual / data.total_masuk) * 100)
+    document.getElementById('lap-stat-terjual').textContent = totalTerjual;
+    // Persentase Laku = total terjual hari ini / total stok yang diinput hari ini
+    // (dihitung dari TOTAL gabungan semua produk, bukan rata-rata per menu)
+    const lakuPct = totalMasukHariIni > 0
+        ? Math.round((totalTerjual / totalMasukHariIni) * 100)
         : 0;
-    document.getElementById('lap-stat-laku').textContent = isVerified ? (lakuPct + '%') : 'Menunggu';
+    document.getElementById('lap-stat-laku').textContent = lakuPct + '%';
 
     // Shared row renderer helper
     function buildRowData(d) {
-        const rowVerified = d.is_verified === true;
+        const rowVerified = d.is_verified === true; // dipakai khusus utk kolom Retur
         const lakuRow = d.stok_masuk > 0 ? Math.round((d.terjual / d.stok_masuk) * 100) : 0;
-        const lakuChipClass = !rowVerified ? 'chip-amber'
-            : lakuRow >= 80 ? 'chip-green'
+        const lakuChipClass = lakuRow >= 80 ? 'chip-green'
             : lakuRow >= 50 ? 'chip-amber'
             : lakuRow > 0  ? 'chip-red'
             : 'chip-gray';
-        const lakuLabel = !rowVerified ? '⏳ Pending'
-            : lakuRow >= 80 ? `🔥 ${lakuRow}%`
+        const lakuLabel = lakuRow >= 80 ? `🔥 ${lakuRow}%`
             : lakuRow >= 50 ? `⚡ ${lakuRow}%`
             : lakuRow > 0  ? `📉 ${lakuRow}%`
             : '—';
         const returVal   = rowVerified ? d.retur : '—';
-        const terjualVal = rowVerified ? d.terjual : 'Pending';
+        const terjualVal = d.terjual;
         return { rowVerified, lakuRow, lakuChipClass, lakuLabel, returVal, terjualVal };
     }
 
     // Detail tabel (desktop)
     const tbody = document.getElementById('laporan-tbody');
     tbody.innerHTML = detail.map(d => {
-        const { lakuChipClass, lakuLabel, returVal, terjualVal, rowVerified } = buildRowData(d);
+        const { lakuChipClass, lakuLabel, returVal, rowVerified } = buildRowData(d);
         const returCell   = rowVerified ? returVal : '<span style="color:var(--gray-300);font-size:11px;">—</span>';
-        const terjualCell = rowVerified
-            ? `<b style="color:var(--blue-600);">${d.terjual}</b>`
-            : `<span style="font-size:10px;color:var(--amber-500);font-weight:700;">Pending</span>`;
+        const terjualCell = `<b style="color:var(--blue-600);">${d.terjual}</b>`;
         return `
         <tr>
             <td style="max-width:140px;">
@@ -2562,7 +2605,7 @@ function renderLaporan(data) {
     mobileList.innerHTML = detail.map(d => {
         const { lakuChipClass, lakuLabel, returVal, terjualVal, rowVerified } = buildRowData(d);
         const returColor  = rowVerified ? 'var(--red-600)' : 'var(--gray-300)';
-        const terjualColor = rowVerified ? 'var(--blue-600)' : 'var(--amber-500)';
+        const terjualColor = 'var(--blue-600)';
         return `
         <div class="lap-prod-card">
             <div class="lap-prod-header">
@@ -2681,6 +2724,18 @@ async function fetchRiwayat() {
         .eq('mitra_wa', mitraData.wa)
         .gte('tanggal', fromStr)
         .order('tanggal', { ascending: false });
+
+    // Baris hari ini dihitung ulang realtime (Terjual = Masuk − sisa stok
+    // saat ini di menu, yang otomatis berkurang oleh transaksi kasir
+    // manual & online). Baris tanggal lampau tetap memakai angka final
+    // yang sudah tersimpan.
+    const today = todayStr();
+    const rowToday = (data || []).find(d => d.tanggal === today);
+    if (rowToday) {
+        const detailRealtime = await hitungDetailRealtime(rowToday.detail || []);
+        rowToday.detail = detailRealtime;
+        rowToday.total_terjual = detailRealtime.reduce((s, d) => s + (parseInt(d.terjual) || 0), 0);
+    }
 
     loadEl.classList.add('hidden');
 
