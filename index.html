@@ -681,7 +681,9 @@
 
             /* Padding konten & floating bars */
             .content { padding-bottom: 74px; }
-            #floating-total-bar { bottom: 62px !important; }
+            /* Sticky bar total bayar disembunyikan di mobile (sesuai permintaan):
+               info total sudah tampil di kartu "Ringkasan Keuangan" pada tab Laporan. */
+            #floating-total-bar { display: none !important; }
             #floating-flash-bar { bottom: 62px !important; }
         }
 
@@ -1154,7 +1156,7 @@
                         </div>
                         <div style="height:12px;"></div>
                         <div class="total-bayar-box">
-                            <div class="total-bayar-label"><i class="fa-solid fa-hand-holding-dollar"></i> Total yang Harus Dibayarkan ke Warunk Arsi</div>
+                            <div class="total-bayar-label" id="lap-fin-total-bayar-label"><i class="fa-solid fa-hand-holding-dollar"></i> Total yang Harus Dibayarkan ke Warunk Arsi</div>
                             <div class="total-bayar-value" id="lap-fin-total-bayar">Rp 0</div>
                             <div class="total-bayar-sub">= Produk Terjual × Harga Beli Masing-masing</div>
                         </div>
@@ -1337,7 +1339,7 @@
 <!-- ─── FLOATING TOTAL BAYAR BAR ─── -->
 <div id="floating-total-bar">
     <div>
-        <div class="ftb-label"><i class="fa-solid fa-hand-holding-dollar"></i> Total Dibayarkan ke Warunk Arsi</div>
+        <div class="ftb-label" id="ftb-label"><i class="fa-solid fa-hand-holding-dollar"></i> Total Dibayarkan ke Warunk Arsi</div>
         <div class="ftb-amount" id="ftb-amount">Rp 0</div>
     </div>
     <span class="ftb-status belum" id="ftb-status-badge"><i class="fa-solid fa-clock"></i> Belum Dibayar</span>
@@ -2690,6 +2692,14 @@ async function renderLaporan(data) {
     const bar = document.getElementById('floating-total-bar');
     const ftbAmount = document.getElementById('ftb-amount');
     const ftbBadge  = document.getElementById('ftb-status-badge');
+
+    // Nama mitra utk label "dibayarkan ke ..." (in-card + floating bar)
+    const namaMitra = (mitraData?.nama || data.mitra_nama || 'Mitra');
+    const lblBox = document.getElementById('lap-fin-total-bayar-label');
+    if (lblBox) lblBox.innerHTML = `<i class="fa-solid fa-hand-holding-dollar"></i> Total yang Harus Dibayarkan ke ${namaMitra}`;
+    const lblFtb = document.getElementById('ftb-label');
+    if (lblFtb) lblFtb.innerHTML = `<i class="fa-solid fa-hand-holding-dollar"></i> Total Dibayarkan ke ${namaMitra}`;
+
     if (bar && isVerified) {
         bar.style.display = 'flex';
         ftbAmount.textContent = formatRp(nilaiTerjual);
