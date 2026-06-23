@@ -2417,6 +2417,9 @@ async function submitStokHarian() {
         diinput_admin:  false,   // mitra yang submit → bukan admin
         edit_unlocked:  false,   // kunci kembali setelah submit/submit-ulang
         edit_request:   false,   // reset permintaan koreksi setelah submit ulang
+        session_started_at: new Date().toISOString(), // tandai mulai sesi baru — transaksi
+                                                        // sebelum waktu ini (sesi lama) tidak
+                                                        // ikut terhitung di rekap Kasir/Online
         updated_at:     new Date().toISOString()
     };
 
@@ -2880,7 +2883,13 @@ ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS diinput_admin boolean DEFAU
 
 -- Tambah kolom request edit ulang (mitra minta koreksi ke admin):
 ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS edit_request boolean DEFAULT false;
-ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS edit_request_at timestamptz DEFAULT NULL;`;
+ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS edit_request_at timestamptz DEFAULT NULL;
+
+-- Tambah kolom waktu mulai sesi (ditandai ulang setiap mitra/admin submit/input ulang
+-- stok hari itu) — dipakai agar rekap Kasir/Online & Print HANYA menghitung transaksi
+-- SETELAH submit ulang ini, sehingga transaksi dari sesi lama tidak ikut tercampur
+-- saat mitra input ulang stok di hari yang sama:
+ALTER TABLE konsinyasi_stok ADD COLUMN IF NOT EXISTS session_started_at timestamptz DEFAULT now();`;
 
     alert('PANDUAN: Tabel belum ada!\n\nJalankan SQL berikut di Supabase → SQL Editor:\n\n' + sql);
 }
