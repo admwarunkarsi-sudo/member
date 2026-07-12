@@ -9,6 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // FORCED CACHE BUSTER - AUTO RELOAD ONCE
+        if (!sessionStorage.getItem('ui_fix_hard_reload_v4')) {
+            sessionStorage.setItem('ui_fix_hard_reload_v4', 'true');
+            window.location.reload(true);
+        }
+    </script>
     <style>
         :root {
             --green-900: #052e16;
@@ -892,6 +899,9 @@
         </div>
     </div>
 
+    <!-- PRE-ORDER ALERT CONTAINER -->
+    <div id="bulk-alerts"></div>
+
     <!-- Tabs -->
     <div class="tab-bar">
         <button class="tab-item active" onclick="switchTab('input')" id="tab-input">
@@ -1560,8 +1570,13 @@ async function initApp() {
     await renderFormInput();
     await cekStatusHariIni();
 
-    // ── Realtime: dengarkan update stok dari Admin POS ──
+    //  Realtime: dengarkan update stok dari Admin POS 
     setupAdminMenuSync();
+
+    // Polling Pesanan Khusus
+    fetchPreOrders();
+    if(window.bulkPollingInterval) clearInterval(window.bulkPollingInterval);
+    window.bulkPollingInterval = setInterval(fetchPreOrders, 10000);
 }
 
 
@@ -2931,6 +2946,95 @@ async function tryAutoLogin() {
 window.addEventListener('DOMContentLoaded', () => {
     tryAutoLogin();
 });
+
+// LOGIKA PESANAN KHUSUS / PRE-ORDER
+async function fetchPreOrders() {
+    if(!mitraData || !mitraData.wa) return;
+    try {
+        const { data, error } = await sb.from('orders')
+            .select('*')
+            .eq('status', 'Menunggu Konfirmasi Mitra');
+        if(error) throw error;
+        
+        // Filter orders that have our product
+        const ourOrders = data.filter(o => {
+            return o.detail_items && o.detail_items.some(item => item.mitra_wa === mitraData.wa);
+        });
+
+        renderBulkAlerts(ourOrders);
+    } catch(e) { console.error('Error fetching pre-orders', e); }
+}
+
+function renderBulkAlerts(orders) {
+    const container = document.getElementById('bulk-alerts');
+    if(!container) return;
+    
+    if(!orders || orders.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+    orders.forEach(o => {
+        // Find our items in the order
+        const ourItems = o.detail_items.filter(item => item.mitra_wa === mitraData.wa);
+        if(ourItems.length === 0) return;
+        
+        let itemDetails = ourItems.map(item => `<b>${item.qty} porsi</b> - ${item.nama}`).join('<br>');
+        
+        html += `
+        <!-- Tambahkan div pembungkus luar ini agar sejajar dengan konten bawah -->
+        <div style="max-width: 100%; padding-left: 24px; padding-right: 24px; margin: 0 auto; box-sizing: border-box;">
+            <div style="padding: 16px; margin-top: 16px; margin-bottom: 20px; background: var(--amber-50); border: 1px solid var(--amber-400); border-radius: 12px; border-left: 6px solid var(--amber-500); animation: slideDown 0.3s ease;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 12px;">
+                <div>
+                    <h3 style="color:var(--amber-700); font-weight:800; font-size:16px; margin:0 0 4px 0;"><i class="fa-solid fa-bell"></i> Ada Pesanan Khusus Masuk!</h3>
+                    <div style="font-size:12px; color:var(--gray-600);"><i class="fa-solid fa-user"></i> ${o.member_name} &bull; <i class="fa-solid fa-clock"></i> ${o.catatan.split('] ')[0] + ']'}</div>
+                </div>
+            </div>
+            
+            <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--amber-200); font-size:13px; color:var(--gray-700); box-sizing: border-box;">
+                <div style="font-weight: bold; font-size: 14px; margin-bottom:8px;">${itemDetails}</div>
+                <div style="font-style:italic; color:var(--gray-500); border-top:1px dashed var(--gray-200); padding-top:6px; margin-bottom: 16px;">
+                    Catatan: ${o.catatan.split('] ').slice(1).join('] ') || '-'}
+                </div>
+                
+                <!-- TOMBOL DIMASUKKAN KE SINI AGAR OTOMATIS MENGIKUTI PADDING CARD PUTIH -->
+                <div class="flex gap-4 w-full" style="display: flex; gap: 12px; width: 100%; box-sizing: border-box;">
+                    <button onclick="terimaPreOrder('${o.id}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-center transition block" style="flex: 1; background-color: #16a34a; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-align: center; border: none; cursor: pointer; font-size: 14px;">
+                        ✓ Terima Pesanan
+                    </button>
+                    <button onclick="tolakPreOrder('${o.id}', \`${o.catatan.replace(/`/g, '')}\`)" class="flex-1 bg-red-600 hover:bg-red-750 text-white font-bold py-3 px-6 rounded-lg text-center transition block" style="flex: 1; background-color: #dc2626; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-align: center; border: none; cursor: pointer; font-size: 14px;">
+                        ✕ Tolak Pesanan
+                    </button>
+                </div>
+                </div>
+            </div>
+        </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+async function terimaPreOrder(id) {
+    if(!confirm('Apakah Anda yakin menerima pesanan khusus ini?')) return;
+    try {
+        await sb.from('orders').update({status: 'Antrean'}).eq('id', id);
+        fetchPreOrders();
+    } catch(e) { alert('Gagal memproses pesanan.'); }
+}
+
+async function tolakPreOrder(id, existingCatatan) {
+    const alasan = prompt('Masukkan alasan penolakan pesanan ini (stok habis / tidak sanggup):');
+    if(!alasan) return;
+    
+    try {
+        const newCatatan = existingCatatan + '\\n[DITOLAK MITRA]: ' + alasan;
+        await sb.from('orders').update({status: 'Ditolak Mitra / Batal', catatan: newCatatan}).eq('id', id);
+        fetchPreOrders();
+    } catch(e) { alert('Gagal memproses penolakan.'); }
+}
 </script>
 </body>
 </html>
