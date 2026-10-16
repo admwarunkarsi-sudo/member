@@ -167,8 +167,124 @@
         .login-error.show { display: flex; }
 
         /* ─── MAIN APP ─── */
-        #app-screen { display: none; min-height: 100vh; flex-direction: column; }
+        /* ─── MAIN APP & LAYOUT ─── */
+        #app-screen { display: none; min-height: 100vh; flex-direction: column; width: 100%; background: var(--bg-main); }
         #app-screen.show { display: flex; }
+        @media (min-width: 900px) {
+            #app-screen.show { flex-direction: row; }
+        }
+
+        /* ─── DESKTOP SIDEBAR ─── */
+        .sidebar { display: none; }
+        @media (min-width: 900px) {
+            .sidebar {
+                display: flex; flex-direction: column;
+                width: 270px; min-width: 270px;
+                background: rgba(7, 31, 18, 0.98);
+                border-right: 1px solid var(--border-card);
+                height: 100vh; position: sticky; top: 0; z-index: 45;
+                padding: 20px 16px; box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+            }
+            .sidebar-header {
+                display: flex; align-items: center; gap: 12px;
+                padding-bottom: 16px; border-bottom: 1px solid var(--border-card);
+            }
+            .sidebar-user-box {
+                margin-top: 14px; background: var(--bg-card);
+                border: 1px solid var(--border-card); border-radius: var(--radius);
+                padding: 12px; display: flex; flex-direction: column; gap: 8px;
+            }
+            .sidebar-user-header {
+                display: flex; align-items: center; gap: 10px;
+            }
+            .sidebar-user-avatar {
+                width: 36px; height: 36px; border-radius: 10px;
+                background: rgba(34, 197, 94, 0.15); border: 1px solid var(--border-glow);
+                color: var(--green-accent); display: flex; align-items: center; justify-content: center;
+                font-size: 16px; flex-shrink: 0;
+            }
+            .sidebar-user-name {
+                font-size: 13px; font-weight: 800; color: #fff; line-height: 1.2;
+                white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            }
+            .sidebar-user-wa {
+                font-size: 11px; color: var(--green-mint); font-family: var(--font-mono);
+            }
+            .sidebar-user-badge {
+                display: inline-flex; align-items: center; gap: 5px;
+                font-size: 10px; font-weight: 800; color: var(--green-accent);
+                background: rgba(34, 197, 94, 0.1); padding: 3px 8px;
+                border-radius: 99px; width: fit-content;
+            }
+            .sidebar-menu-label {
+                font-size: 10px; font-weight: 800; color: var(--gray-500);
+                letter-spacing: 1px; margin-top: 18px; margin-bottom: 8px;
+                padding-left: 6px; text-transform: uppercase;
+            }
+            .sidebar-nav {
+                display: flex; flex-direction: column; gap: 6px; flex: 1;
+            }
+            .sidebar-nav-item {
+                display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+                border-radius: var(--radius); background: transparent;
+                border: 1px solid transparent; color: var(--green-mint);
+                cursor: pointer; transition: all .15s; text-align: left; width: 100%;
+            }
+            .sidebar-nav-item:hover {
+                background: var(--bg-card-hover); color: #fff;
+                border-color: rgba(35, 117, 70, 0.4);
+            }
+            .sidebar-nav-item.active {
+                background: #237546; color: #fff; border-color: #2e9359;
+                box-shadow: 0 4px 14px rgba(35, 117, 70, 0.4);
+            }
+            .sidebar-nav-item .nav-icon {
+                font-size: 15px; width: 20px; text-align: center; flex-shrink: 0;
+            }
+            .sidebar-nav-item .nav-text {
+                display: flex; flex-direction: column; min-width: 0;
+            }
+            .sidebar-nav-item .nav-title {
+                font-size: 12px; font-weight: 800; line-height: 1.2;
+            }
+            .sidebar-nav-item .nav-desc {
+                font-size: 10px; opacity: 0.75; font-weight: 600; line-height: 1.2; margin-top: 1px;
+            }
+            .sidebar-footer {
+                padding-top: 14px; border-top: 1px solid var(--border-card);
+                display: flex; flex-direction: column; gap: 10px;
+            }
+            .sidebar-live-pill {
+                display: flex; align-items: center; gap: 8px; font-size: 11px;
+                font-weight: 700; color: var(--green-mint); padding: 7px 10px;
+                background: var(--bg-card); border: 1px solid var(--border-card);
+                border-radius: var(--radius-sm);
+            }
+            .btn-logout-sidebar {
+                display: flex; align-items: center; justify-content: center; gap: 8px;
+                width: 100%; padding: 10px; border-radius: var(--radius-sm);
+                background: rgba(127, 29, 29, 0.2); border: 1px solid #7f1d1d;
+                color: #fca5a5; font-size: 12px; font-weight: 800; cursor: pointer;
+                transition: all .15s;
+            }
+            .btn-logout-sidebar:hover { background: #991b1b; color: #fff; }
+
+            .main-wrapper {
+                flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 100vh;
+            }
+            .topbar-brand.mobile-only { display: none !important; }
+            .btn-logout.mobile-only { display: none !important; }
+            .desktop-only { display: flex !important; }
+            .tab-bar { display: none !important; }
+            .mobile-bottom-nav { display: none !important; }
+        }
+
+        @media (max-width: 899px) {
+            .desktop-only { display: none !important; }
+            .sidebar { display: none !important; }
+            .tab-bar { display: none !important; }
+            .main-wrapper { width: 100%; }
+        }
 
         /* ─── TOPBAR ─── */
         .topbar {
@@ -188,10 +304,14 @@
         .brand-icon img { width: 100%; height: 100%; object-fit: cover; }
         .brand-title { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: -0.02em; }
         .brand-sub { font-size: 10px; color: var(--green-accent); font-weight: 700; letter-spacing: 0.2px; }
+        .desktop-header-title { display: none; flex-direction: column; }
+        .dht-title { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: -0.02em; }
+        .dht-sub { font-size: 11px; color: var(--green-mint); font-weight: 600; }
         .topbar-right { display: flex; align-items: center; gap: 10px; }
         .mitra-badge {
             background: var(--bg-card); border: 1px solid var(--border-card);
             border-radius: var(--radius-sm); padding: 5px 12px; text-align: right;
+            display: none;
         }
         .mitra-badge-name { font-size: 12px; font-weight: 800; color: #fff; }
         .mitra-badge-wa { font-size: 10px; color: var(--green-mint); font-family: var(--font-mono); }
@@ -203,28 +323,9 @@
         }
         .btn-logout:hover { background: #991b1b; color: #fff; }
 
-        /* ─── DATE & STATUS BAR ─── */
-        .date-bar {
-            background: var(--bg-card-sub);
-            border-bottom: 1px solid var(--border-card);
-            padding: 10px 20px;
-            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-        }
-        .date-info { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .date-pill {
-            background: var(--bg-card); border: 1px solid var(--border-card);
-            border-radius: 99px; padding: 5px 13px;
-            font-size: 11px; font-weight: 800; color: var(--green-accent);
-            display: flex; align-items: center; gap: 6px;
-        }
-        .status-badge {
-            font-size: 10px; font-weight: 800; padding: 4px 11px; border-radius: 99px;
-            display: flex; align-items: center; gap: 5px;
-        }
-        .status-badge.submitted { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); color: var(--green-accent); }
-        .status-badge.draft { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber-400); }
+        /* ─── DATE PICKER IN TOPBAR ─── */
         .date-picker-wrap { display: flex; align-items: center; gap: 8px; }
-        .date-picker-wrap label { font-size: 11px; font-weight: 700; color: var(--green-mint); }
+        .date-picker-wrap label { font-size: 11px; font-weight: 700; color: var(--green-mint); display: flex; align-items: center; gap: 5px; }
         .date-picker-wrap input[type="date"] {
             background: var(--bg-card); border: 1px solid var(--border-card);
             border-radius: var(--radius-sm); padding: 5px 10px; color: #fff;
@@ -232,30 +333,139 @@
             outline: none; color-scheme: dark;
         }
         .date-picker-wrap input[type="date"]:focus { border-color: var(--border-glow); }
+        @media (max-width: 480px) {
+            .hide-mobile { display: none; }
+        }
 
-        /* ─── DESKTOP TAB BAR ─── */
-        .tab-bar {
-            display: flex; align-items: center; gap: 6px;
-            background: var(--bg-card-sub); border: 1px solid var(--border-card);
-            border-radius: var(--radius); padding: 5px; margin: 16px auto 0;
-            max-width: 980px; width: calc(100% - 40px);
+        /* ─── CARD SAPAAN (HERO GREETING — PERSIS DASHBOARD POS) ─── */
+        .hero-greeting-card {
+            background: linear-gradient(135deg, #0c2b1a 0%, #0f3b23 50%, #071f12 100%);
+            border: 1.5px solid rgba(35, 117, 70, 0.85);
+            border-radius: 20px;
+            padding: 22px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.55);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
-        .tab-item {
-            flex: 1; padding: 9px 14px; border: none; border-radius: 10px;
-            background: transparent; color: var(--green-mint);
-            font-size: 12px; font-weight: 800; cursor: pointer; transition: all .15s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+        .hero-ambient-glow {
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.22) 0%, transparent 70%);
+            pointer-events: none;
+            border-radius: 50%;
         }
-        .tab-item:hover { background: var(--bg-card-hover); color: #fff; }
-        .tab-item.active {
-            background: #237546; color: #fff;
-            box-shadow: 0 4px 12px rgba(35, 117, 70, 0.35);
+        .hero-top-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-greeting-salutation {
+            font-size: 13px;
+            color: var(--green-mint);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .hero-greeting-salutation strong {
+            color: #fff;
+            font-weight: 900;
+        }
+        .hero-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -0.02em;
+            margin-top: 4px;
+            line-height: 1.25;
+        }
+        .hero-subtitle {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-top: 4px;
+            max-width: 620px;
+            line-height: 1.45;
+        }
+        .hero-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(7, 31, 18, 0.9);
+            border: 1px solid var(--border-glow);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--green-mint);
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+        .hero-badge-pill i { color: #fbbf24; }
+        .hero-status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(22, 70, 44, 0.6);
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(7, 31, 18, 0.8);
+            border: 1px solid rgba(35, 117, 70, 0.8);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 11px;
+            color: var(--green-mint);
+            font-weight: 600;
+        }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green-accent);
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulseGlow 2s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .status-badge {
+            font-size: 10px; font-weight: 800; padding: 4px 11px; border-radius: 99px;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .status-badge.submitted { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); color: var(--green-accent); }
+        .status-badge.draft { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber-400); }
+
+        @media (max-width: 640px) {
+            .hero-greeting-card { padding: 16px; border-radius: var(--radius); }
+            .hero-title { font-size: 18px; }
+            .hero-top-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .hero-status-row { flex-direction: column; align-items: flex-start; gap: 8px; }
         }
 
         /* ─── MOBILE BOTTOM NAV ─── */
         .mobile-bottom-nav { display: none; }
-        @media (max-width: 720px) {
-            .tab-bar { display: none !important; }
+        @media (max-width: 899px) {
             .mobile-bottom-nav {
                 display: flex; position: fixed; bottom: 0; left: 0; right: 0;
                 background: rgba(7, 31, 18, 0.96); backdrop-filter: blur(16px);
@@ -276,8 +486,8 @@
 
         /* ─── CONTENT AREA ─── */
         .content {
-            flex: 1; padding: 20px; padding-bottom: 90px;
-            max-width: 980px; margin: 0 auto; width: 100%;
+            flex: 1; padding: 24px; padding-bottom: 90px;
+            max-width: 1100px; margin: 0 auto; width: 100%;
         }
         .tab-panel { display: none; }
         .tab-panel.active { display: block; animation: fadeIn .2s ease; }
@@ -550,90 +760,163 @@
 <!-- ─── MAIN APP SCREEN ─── -->
 <div id="app-screen">
 
-    <!-- Topbar -->
-    <div class="topbar">
-        <div class="topbar-brand">
+    <!-- ─── 1. DESKTOP SIDEBAR (STANDAR DASHBOARD PROFESIONAL) ─── -->
+    <aside id="app-sidebar" class="sidebar">
+        <!-- Brand Header -->
+        <div class="sidebar-header">
             <div class="brand-icon">
                 <img src="https://i.ibb.co.com/5gksJL19/534314181-17845743486547960-8463846081803860484-n.jpg"
                      alt="Logo Warunk Arsi" onerror="this.src='https://img.icons8.com/illustrations/kolor/64/fast-food.png'">
             </div>
             <div>
-                <div class="brand-title">Portal Mitra — Warunk Arsi</div>
-                <div class="brand-sub"><i class="fa-solid fa-circle" style="color:var(--green-accent);font-size:7px;"></i> Terhubung ke Kasir POS (Live)</div>
+                <div class="brand-title">Portal Mitra</div>
+                <div class="brand-sub">Warunk Arsi POS</div>
             </div>
         </div>
-        <div class="topbar-right">
-            <div class="mitra-badge">
-                <div class="mitra-badge-name" id="topbar-mitra-name">—</div>
-                <div class="mitra-badge-wa" id="topbar-mitra-wa">—</div>
+
+        <!-- Mitra Profile Box in Sidebar -->
+        <div class="sidebar-user-box">
+            <div class="sidebar-user-header">
+                <div class="sidebar-user-avatar">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div style="flex:1;min-width:0;">
+                    <div class="sidebar-user-name" id="sidebar-mitra-name">—</div>
+                    <div class="sidebar-user-wa" id="sidebar-mitra-wa">—</div>
+                </div>
             </div>
-            <button class="btn-logout" onclick="doLogout()" title="Keluar dari portal mitra">
-                <i class="fa-solid fa-right-from-bracket"></i> Keluar
+            <div class="sidebar-user-badge">
+                <i class="fa-solid fa-circle-check"></i> Mitra Supplier Aktif
+            </div>
+        </div>
+
+        <!-- Menu Section Label -->
+        <div class="sidebar-menu-label">NAVIGASI UTAMA</div>
+
+        <!-- Vertical Sidebar Nav (4 Menu Esensial Tersinkron POS) -->
+        <nav class="sidebar-nav">
+            <button class="sidebar-nav-item active" onclick="switchTab('input')" id="side-tab-input">
+                <i class="fa-solid fa-boxes-stacked nav-icon"></i>
+                <div class="nav-text">
+                    <span class="nav-title">Input Stok Pagi</span>
+                    <span class="nav-desc">Setor produk & sync POS</span>
+                </div>
+            </button>
+
+            <button class="sidebar-nav-item" onclick="switchTab('laporan')" id="side-tab-laporan">
+                <i class="fa-solid fa-chart-line nav-icon"></i>
+                <div class="nav-text">
+                    <span class="nav-title">Laporan POS</span>
+                    <span class="nav-desc">Rekap jual, retur & omset</span>
+                </div>
+            </button>
+
+            <button class="sidebar-nav-item" onclick="switchTab('realtime')" id="side-tab-realtime">
+                <i class="fa-solid fa-store nav-icon"></i>
+                <div class="nav-text">
+                    <span class="nav-title">Stok di Kasir</span>
+                    <span class="nav-desc">Sisa fisik live di meja POS</span>
+                </div>
+            </button>
+
+            <button class="sidebar-nav-item" onclick="switchTab('riwayat')" id="side-tab-riwayat">
+                <i class="fa-solid fa-clock-rotate-left nav-icon"></i>
+                <div class="nav-text">
+                    <span class="nav-title">Riwayat Closing</span>
+                    <span class="nav-desc">Arsip 30 hari & tagihan</span>
+                </div>
+            </button>
+        </nav>
+
+        <!-- Sidebar Footer Status & Logout -->
+        <div class="sidebar-footer">
+            <div class="sidebar-live-pill">
+                <span class="pulse-dot"></span>
+                <span>Kasir POS: Live Online</span>
+            </div>
+            <button class="btn-logout-sidebar" onclick="doLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Keluar Portal
             </button>
         </div>
-    </div>
+    </aside>
 
-    <!-- Date & Status Bar -->
-    <div class="date-bar">
-        <div class="date-info">
-            <div class="date-pill">
-                <i class="fa-solid fa-calendar-day"></i>
-                <span id="tanggal-hari-ini">—</span>
+    <!-- ─── 2. MAIN CONTENT WRAPPER ─── -->
+    <div class="main-wrapper">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <!-- Mobile Brand (Tampil hanya di HP) -->
+            <div class="topbar-brand mobile-only">
+                <div class="brand-icon">
+                    <img src="https://i.ibb.co.com/5gksJL19/534314181-17845743486547960-8463846081803860484-n.jpg"
+                         alt="Logo Warunk Arsi" onerror="this.src='https://img.icons8.com/illustrations/kolor/64/fast-food.png'">
+                </div>
+                <div>
+                    <div class="brand-title">Portal Mitra</div>
+                    <div class="brand-sub"><i class="fa-solid fa-circle" style="color:var(--green-accent);font-size:7px;"></i> POS Live</div>
+                </div>
             </div>
-            <div id="stok-status-badge" class="status-badge draft">
-                <i class="fa-solid fa-circle-dot"></i> Belum Input Stok Hari Ini
+
+            <!-- Desktop Active Header (Tampil di Desktop) -->
+            <div class="desktop-header-title desktop-only">
+                <div class="dht-title" id="desktop-active-menu-title">Input Stok Pagi</div>
+                <div class="dht-sub">Portal Mitra Konsinyasi Warunk Arsi</div>
             </div>
-        </div>
-        <div class="date-picker-wrap">
-            <label>Lihat Tanggal:</label>
-            <input type="date" id="tanggal-filter" onchange="gantiTanggal()">
-        </div>
-    </div>
 
-    <!-- PRE-ORDER ALERT CONTAINER -->
-    <div id="bulk-alerts"></div>
+            <!-- Topbar Right Controls -->
+            <div class="topbar-right">
+                <div class="date-picker-wrap">
+                    <label><i class="fa-solid fa-calendar-day"></i> <span class="hide-mobile">Tanggal:</span></label>
+                    <input type="date" id="tanggal-filter" onchange="gantiTanggal()">
+                </div>
 
-    <!-- Desktop Tab Bar (4 Essential Menus Synchronized with POS) -->
-    <div class="tab-bar">
-        <button class="tab-item active" onclick="switchTab('input')" id="tab-input">
-            <i class="fa-solid fa-boxes-stacked"></i> Input Stok Pagi
-        </button>
-        <button class="tab-item" onclick="switchTab('laporan')" id="tab-laporan">
-            <i class="fa-solid fa-chart-line"></i> Laporan POS
-        </button>
-        <button class="tab-item" onclick="switchTab('realtime')" id="tab-realtime">
-            <i class="fa-solid fa-store"></i> Stok di Kasir
-        </button>
-        <button class="tab-item" onclick="switchTab('riwayat')" id="tab-riwayat">
-            <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Closing
-        </button>
-    </div>
+                <div class="mitra-badge desktop-only">
+                    <div class="mitra-badge-name" id="topbar-mitra-name">—</div>
+                    <div class="mitra-badge-wa" id="topbar-mitra-wa">—</div>
+                </div>
 
-    <!-- Mobile Bottom Navigation (4 Balanced Tabs, Zero Clutter) -->
-    <div class="mobile-bottom-nav">
-        <button class="mobile-nav-item active" onclick="switchTab('input')" id="mob-tab-input">
-            <i class="fa-solid fa-boxes-stacked"></i>
-            <span>Input Stok</span>
-        </button>
-        <button class="mobile-nav-item" onclick="switchTab('laporan')" id="mob-tab-laporan">
-            <i class="fa-solid fa-chart-line"></i>
-            <span>Laporan POS</span>
-        </button>
-        <button class="mobile-nav-item" onclick="switchTab('realtime')" id="mob-tab-realtime">
-            <i class="fa-solid fa-store"></i>
-            <span>Stok Kasir</span>
-        </button>
-        <button class="mobile-nav-item" onclick="switchTab('riwayat')" id="mob-tab-riwayat">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            <span>Riwayat</span>
-        </button>
-    </div>
+                <button class="btn-logout mobile-only" onclick="doLogout()" title="Keluar">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
 
-    <!-- Content Area -->
-    <div class="content">
+        <!-- Content Area -->
+        <div class="content">
 
-        <!-- ─── 1. TAB INPUT STOK ─── -->
-        <div id="panel-input" class="tab-panel active">
+            <!-- ─── CARD SAPAAN (HERO GREETING — PERSIS DASHBOARD POS) ─── -->
+            <div class="hero-greeting-card">
+                <div class="hero-ambient-glow"></div>
+                <div class="hero-top-row">
+                    <div>
+                        <div class="hero-greeting-salutation">
+                            <span id="hero-salutation">Selamat siang</span>, <strong id="hero-mitra-name">—</strong> 👋
+                        </div>
+                        <h2 class="hero-title">Dashboard Mitra Supplier & Konsinyasi</h2>
+                        <p class="hero-subtitle">Kelola input stok harian, pantau sisa penjualan kasir secara live, dan periksa rekapitulasi hak bayar bersih Anda.</p>
+                    </div>
+                    <div class="hero-badge-pill">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>MITRA RESMI AKTIF</span>
+                    </div>
+                </div>
+
+                <div class="hero-status-row">
+                    <div class="hero-status-pill">
+                        <span class="pulse-dot"></span>
+                        <span>Terhubung Real-Time ke Kasir POS • <strong id="hero-date-display">—</strong></span>
+                    </div>
+                    <div id="stok-status-badge" class="status-badge draft">
+                        <i class="fa-solid fa-circle-dot"></i> Belum Input Stok Hari Ini
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRE-ORDER ALERT CONTAINER -->
+            <div id="bulk-alerts"></div>
+
+            <!-- ─── 1. TAB INPUT STOK ─── -->
+            <div id="panel-input" class="tab-panel active">
 
             <!-- Banner Kunci (Submit Mitra) -->
             <div id="input-lock-banner" style="display:none;align-items:flex-start;gap:12px;background:var(--amber-bg);border:1.5px solid var(--amber-border);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;">
@@ -975,7 +1258,28 @@
             </div>
         </div>
 
-    </div><!-- /content -->
+        </div><!-- /content -->
+    </div><!-- /main-wrapper -->
+
+    <!-- ─── MOBILE BOTTOM NAV (TAMPIL DI SMARTPHONE) ─── -->
+    <nav class="mobile-bottom-nav">
+        <button class="mobile-nav-item active" onclick="switchTab('input')" id="mob-tab-input">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <span>Input Stok</span>
+        </button>
+        <button class="mobile-nav-item" onclick="switchTab('laporan')" id="mob-tab-laporan">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Laporan POS</span>
+        </button>
+        <button class="mobile-nav-item" onclick="switchTab('realtime')" id="mob-tab-realtime">
+            <i class="fa-solid fa-store"></i>
+            <span>Stok Kasir</span>
+        </button>
+        <button class="mobile-nav-item" onclick="switchTab('riwayat')" id="mob-tab-riwayat">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Riwayat</span>
+        </button>
+    </nav>
 </div><!-- /app-screen -->
 
 <!-- ─── FLOATING TOTAL BAR (LAPORAN) ─── -->
@@ -1127,17 +1431,48 @@ function tryAutoLogin() {
 /* ────────────────────────────────────────────────
    INIT & REALTIME SYNC
 ──────────────────────────────────────────────── */
+function getGreeting() {
+    const d = new Date(Date.now() + 7 * 3600 * 1000);
+    const hour = d.getUTCHours();
+    if (hour >= 4 && hour < 11) return 'Selamat pagi';
+    if (hour >= 11 && hour < 15) return 'Selamat siang';
+    if (hour >= 15 && hour < 18) return 'Selamat sore';
+    return 'Selamat malam';
+}
+
+function updateGreetingCard() {
+    const salutation = getGreeting();
+    const salutationEl = document.getElementById('hero-salutation');
+    if (salutationEl) salutationEl.textContent = salutation;
+
+    const heroMitraName = document.getElementById('hero-mitra-name');
+    if (heroMitraName && mitraData) heroMitraName.textContent = mitraData.nama || 'Mitra';
+
+    const sideMitraName = document.getElementById('sidebar-mitra-name');
+    if (sideMitraName && mitraData) sideMitraName.textContent = mitraData.nama || 'Mitra';
+
+    const sideMitraWA = document.getElementById('sidebar-mitra-wa');
+    if (sideMitraWA && mitraData) sideMitraWA.textContent = mitraData.wa || '—';
+
+    const topMitraName = document.getElementById('topbar-mitra-name');
+    if (topMitraName && mitraData) topMitraName.textContent = mitraData.nama || 'Mitra';
+
+    const topMitraWA = document.getElementById('topbar-mitra-wa');
+    if (topMitraWA && mitraData) topMitraWA.textContent = mitraData.wa || '—';
+
+    const heroDate = document.getElementById('hero-date-display');
+    if (heroDate) heroDate.textContent = formatTanggal(selectedDate);
+}
+
 async function initApp() {
     document.getElementById('loading-overlay').classList.remove('hidden');
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app-screen').classList.add('show');
 
-    document.getElementById('topbar-mitra-name').textContent = mitraData.nama;
-    document.getElementById('topbar-mitra-wa').textContent   = mitraData.wa;
-
     selectedDate = todayStr();
     document.getElementById('tanggal-filter').value = selectedDate;
     updateDateDisplay();
+    updateGreetingCard();
 
     await renderFormInput();
     await cekStatusHariIni();
@@ -1148,31 +1483,48 @@ async function initApp() {
 }
 
 function updateDateDisplay() {
-    document.getElementById('tanggal-hari-ini').textContent = formatTanggal(selectedDate);
+    const el = document.getElementById('tanggal-hari-ini');
+    if (el) el.textContent = formatTanggal(selectedDate);
+    const heroDate = document.getElementById('hero-date-display');
+    if (heroDate) heroDate.textContent = formatTanggal(selectedDate);
 }
 
 async function gantiTanggal() {
     selectedDate = document.getElementById('tanggal-filter').value;
     updateDateDisplay();
+    updateGreetingCard();
     await renderFormInput();
     await cekStatusHariIni();
-    const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '') || 'input';
+    const activeTab = document.querySelector('.sidebar-nav-item.active')?.id?.replace('side-tab-', '') ||
+                      document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '') || 'input';
     if (activeTab === 'laporan') await loadLaporan();
     if (activeTab === 'riwayat') await fetchRiwayat();
 }
 
 /* ────────────────────────────────────────────────
-   TAB SWITCHER (4 Clean Menus Synchronized with POS)
+   TAB SWITCHER (Sidebar Desktop & Bottom Nav Mobile)
 ──────────────────────────────────────────────── */
 function switchTab(tab) {
+    const titles = {
+        input: 'Input Stok Pagi',
+        laporan: 'Laporan POS',
+        realtime: 'Stok di Kasir',
+        riwayat: 'Riwayat Closing'
+    };
+
     ['input', 'laporan', 'realtime', 'riwayat'].forEach(t => {
-        const tabEl = document.getElementById(`tab-${t}`);
-        const panelEl = document.getElementById(`panel-${t}`);
+        const sideEl  = document.getElementById(`side-tab-${t}`);
         const mobItem = document.getElementById(`mob-tab-${t}`);
-        if (tabEl) tabEl.classList.toggle('active', t === tab);
-        if (panelEl) panelEl.classList.toggle('active', t === tab);
+        const panelEl = document.getElementById(`panel-${t}`);
+        if (sideEl)  sideEl.classList.toggle('active', t === tab);
         if (mobItem) mobItem.classList.toggle('active', t === tab);
+        if (panelEl) panelEl.classList.toggle('active', t === tab);
     });
+
+    const activeTitleEl = document.getElementById('desktop-active-menu-title');
+    if (activeTitleEl && titles[tab]) {
+        activeTitleEl.textContent = titles[tab];
+    }
 
     const barTotal = document.getElementById('floating-total-bar');
     if (barTotal && tab !== 'laporan') barTotal.style.display = 'none';
@@ -1181,10 +1533,10 @@ function switchTab(tab) {
     if (tab === 'riwayat') fetchRiwayat();
     if (tab === 'realtime') loadRealtimeStok();
 
-    const openedTab    = document.getElementById('tab-' + tab);
-    const openedMobTab = document.getElementById('mob-tab-' + tab);
-    if (openedTab)    openedTab.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
-    if (openedMobTab) openedMobTab.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
+    const openedSideTab = document.getElementById('side-tab-' + tab);
+    const openedMobTab  = document.getElementById('mob-tab-' + tab);
+    if (openedSideTab) openedSideTab.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
+    if (openedMobTab)  openedMobTab.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
 }
 
 /* ────────────────────────────────────────────────
@@ -1753,12 +2105,14 @@ function setupAdminMenuSync() {
         .on('postgres_changes', { event: '*', schema: 'public', table: 'konsinyasi_stok' }, (payload) => {
             if (payload.new && payload.new.mitra_wa === mitraData.wa && payload.new.tanggal === selectedDate) {
                 cekStatusHariIni();
-                const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '');
+                const activeTab = document.querySelector('.sidebar-nav-item.active')?.id?.replace('side-tab-', '') ||
+                                  document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '');
                 if (activeTab === 'laporan') loadLaporan();
             }
         })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'menu' }, () => {
-            const activeTab = document.querySelector('.tab-item.active')?.id?.replace('tab-', '');
+            const activeTab = document.querySelector('.sidebar-nav-item.active')?.id?.replace('side-tab-', '') ||
+                              document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '');
             if (activeTab === 'realtime') loadRealtimeStok();
         })
         .subscribe();
