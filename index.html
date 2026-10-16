@@ -6,7 +6,7 @@
     <title>Portal Mitra — Warunk Arsi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -40,7 +40,7 @@
             --radius: 14px;
             --radius-lg: 20px;
             --radius-xl: 26px;
-            --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
         }
 
@@ -463,25 +463,137 @@
             .hero-status-row { flex-direction: column; align-items: flex-start; gap: 8px; }
         }
 
-        /* ─── MOBILE BOTTOM NAV ─── */
+        /* ─── MOBILE BOTTOM NAV (5 ITEMS DENGAN TOMBOL INPUT STOK DI TENGAH) ─── */
         .mobile-bottom-nav { display: none; }
         @media (max-width: 899px) {
             .mobile-bottom-nav {
                 display: flex; position: fixed; bottom: 0; left: 0; right: 0;
                 background: rgba(7, 31, 18, 0.96); backdrop-filter: blur(16px);
                 border-top: 1px solid var(--border-card);
-                padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+                padding: 4px 6px calc(6px + env(safe-area-inset-bottom));
                 z-index: 50; box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
+                align-items: flex-end;
             }
             .mobile-nav-item {
                 flex: 1; border: none; background: transparent;
-                display: flex; flex-direction: column; align-items: center; gap: 3px;
+                display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
                 padding: 6px 2px; color: var(--gray-400); cursor: pointer;
-                font-size: 9px; font-weight: 800; transition: color .15s;
+                font-size: 9px; font-weight: 700; transition: color .15s; font-family: var(--font);
             }
             .mobile-nav-item i { font-size: 16px; }
-            .mobile-nav-item.active { color: var(--green-accent); }
+            .mobile-nav-item.active { color: var(--green-accent); font-weight: 800; }
             .mobile-nav-item.active i { transform: scale(1.1); transition: transform .15s; }
+
+            /* Tombol Input Stok di Tengah (Center Action Button) */
+            .mobile-nav-center {
+                flex: 1.15;
+                position: relative;
+                top: -12px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                cursor: pointer;
+                border: none;
+                background: transparent;
+                padding: 0;
+                font-family: var(--font);
+            }
+            .center-btn-bubble {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-size: 18px;
+                box-shadow: 0 4px 16px rgba(34, 197, 94, 0.45), 0 0 0 3px rgba(7, 31, 18, 0.98);
+                transition: transform .15s, box-shadow .15s;
+            }
+            .mobile-nav-center:active .center-btn-bubble {
+                transform: scale(0.92);
+            }
+            .mobile-nav-center.active .center-btn-bubble {
+                box-shadow: 0 0 0 4px #22c55e, 0 8px 22px rgba(34, 197, 94, 0.6);
+                background: #22c55e;
+                color: #05180e;
+            }
+            .center-btn-label {
+                font-size: 9px;
+                font-weight: 800;
+                color: var(--green-accent);
+                margin-top: 3px;
+                white-space: nowrap;
+            }
+        }
+
+        /* ─── DASHBOARD WIDGETS & SHORTCUTS ─── */
+        .dash-hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .dash-widget {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all .2s;
+        }
+        .dash-widget:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-2px);
+        }
+        .dash-widget-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .dash-widget-val {
+            font-size: 18px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.2;
+            font-family: var(--font);
+        }
+        .dash-widget-lbl {
+            font-size: 11px;
+            color: var(--green-mint);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+        .dash-shortcuts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .dash-shortcut-card {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all .15s;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+        }
+        .dash-shortcut-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-glow);
+            transform: translateY(-2px);
         }
 
         /* ─── CONTENT AREA ─── */
@@ -793,9 +905,17 @@
         <!-- Menu Section Label -->
         <div class="sidebar-menu-label">NAVIGASI UTAMA</div>
 
-        <!-- Vertical Sidebar Nav (4 Menu Esensial Tersinkron POS) -->
+        <!-- Vertical Sidebar Nav (5 Menu Esensial Tersinkron POS) -->
         <nav class="sidebar-nav">
-            <button class="sidebar-nav-item active" onclick="switchTab('input')" id="side-tab-input">
+            <button class="sidebar-nav-item active" onclick="switchTab('dashboard')" id="side-tab-dashboard">
+                <i class="fa-solid fa-gauge-high nav-icon"></i>
+                <div class="nav-text">
+                    <span class="nav-title">Dashboard</span>
+                    <span class="nav-desc">Ringkasan & performa mitra</span>
+                </div>
+            </button>
+
+            <button class="sidebar-nav-item" onclick="switchTab('input')" id="side-tab-input">
                 <i class="fa-solid fa-boxes-stacked nav-icon"></i>
                 <div class="nav-text">
                     <span class="nav-title">Input Stok Pagi</span>
@@ -884,39 +1004,164 @@
         <!-- Content Area -->
         <div class="content">
 
-            <!-- ─── CARD SAPAAN (HERO GREETING — PERSIS DASHBOARD POS) ─── -->
-            <div class="hero-greeting-card">
-                <div class="hero-ambient-glow"></div>
-                <div class="hero-top-row">
-                    <div>
-                        <div class="hero-greeting-salutation">
-                            <span id="hero-salutation">Selamat siang</span>, <strong id="hero-mitra-name">—</strong> 👋
+            <!-- ─── 0. TAB DASHBOARD (RINGKASAN & OVERVIEW MITRA) ─── -->
+            <div id="panel-dashboard" class="tab-panel active">
+
+                <!-- CARD SAPAAN (HERO GREETING — PERSIS DASHBOARD POS) -->
+                <div class="hero-greeting-card">
+                    <div class="hero-ambient-glow"></div>
+                    <div class="hero-top-row">
+                        <div>
+                            <div class="hero-greeting-salutation">
+                                <span id="hero-salutation">Selamat siang</span>, <strong id="hero-mitra-name">—</strong> 👋
+                            </div>
+                            <h2 class="hero-title">Dashboard Mitra Supplier & Konsinyasi</h2>
+                            <p class="hero-subtitle">Kelola input stok harian, pantau sisa penjualan kasir secara live, dan periksa rekapitulasi hak bayar bersih Anda.</p>
                         </div>
-                        <h2 class="hero-title">Dashboard Mitra Supplier & Konsinyasi</h2>
-                        <p class="hero-subtitle">Kelola input stok harian, pantau sisa penjualan kasir secara live, dan periksa rekapitulasi hak bayar bersih Anda.</p>
+                        <div class="hero-badge-pill">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>MITRA RESMI AKTIF</span>
+                        </div>
                     </div>
-                    <div class="hero-badge-pill">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span>MITRA RESMI AKTIF</span>
+
+                    <div class="hero-status-row">
+                        <div class="hero-status-pill">
+                            <span class="pulse-dot"></span>
+                            <span>Terhubung Real-Time ke Kasir POS • <strong id="hero-date-display">—</strong></span>
+                        </div>
+                        <div id="stok-status-badge" class="status-badge draft">
+                            <i class="fa-solid fa-circle-dot"></i> Belum Input Stok Hari Ini
+                        </div>
                     </div>
                 </div>
 
-                <div class="hero-status-row">
-                    <div class="hero-status-pill">
-                        <span class="pulse-dot"></span>
-                        <span>Terhubung Real-Time ke Kasir POS • <strong id="hero-date-display">—</strong></span>
+                <!-- Banner Status Input Stok Hari Ini (Action Call) -->
+                <div id="dash-stok-banner" style="margin-bottom:20px;"></div>
+
+                <!-- Stat Grid Overview Hari Ini -->
+                <div class="dash-hero-grid">
+                    <div class="dash-widget">
+                        <div class="dash-widget-icon" style="background:rgba(34,197,94,0.15);color:var(--green-accent);">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                        <div>
+                            <div class="dash-widget-val" id="dash-stat-masuk">0 pcs</div>
+                            <div class="dash-widget-lbl">Stok Masuk Pagi</div>
+                        </div>
                     </div>
-                    <div id="stok-status-badge" class="status-badge draft">
-                        <i class="fa-solid fa-circle-dot"></i> Belum Input Stok Hari Ini
+                    <div class="dash-widget">
+                        <div class="dash-widget-icon" style="background:var(--red-bg);color:var(--red-400);">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </div>
+                        <div>
+                            <div class="dash-widget-val" id="dash-stat-retur" style="color:var(--red-400);">0 pcs</div>
+                            <div class="dash-widget-lbl">Retur Sore (Kasir)</div>
+                        </div>
+                    </div>
+                    <div class="dash-widget">
+                        <div class="dash-widget-icon" style="background:var(--blue-bg);color:var(--blue-400);">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                        </div>
+                        <div>
+                            <div class="dash-widget-val" id="dash-stat-terjual" style="color:var(--green-accent);">0 pcs</div>
+                            <div class="dash-widget-lbl">Terjual Hari Ini</div>
+                        </div>
+                    </div>
+                    <div class="dash-widget" style="background:linear-gradient(135deg,#0c2b1a,#16462c);border-color:var(--border-glow);">
+                        <div class="dash-widget-icon" style="background:rgba(34,197,94,0.25);color:var(--green-accent);">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </div>
+                        <div>
+                            <div class="dash-widget-val" id="dash-stat-hak" style="color:#fff;font-size:20px;">Rp 0</div>
+                            <div class="dash-widget-lbl" style="color:var(--green-accent);font-weight:700;">Hak Bayar Bersih Hari Ini</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Monitoring Sisa Stok di Meja Kasir (Live Glance) -->
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="ico"><i class="fa-solid fa-store"></i></div>
+                            Monitoring Sisa Stok Fisik di Kasir POS (Live)
+                        </div>
+                        <button onclick="switchTab('realtime')" class="btn btn-ghost btn-sm">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Monitoring
+                        </button>
+                    </div>
+                    <div class="card-body" style="padding:16px 20px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                <div style="font-size:28px;font-weight:900;color:#fff;" id="dash-rt-total">0</div>
+                                <div>
+                                    <div style="font-size:12px;font-weight:800;color:#fff;">Total Pcs Produk di Etalase</div>
+                                    <div style="font-size:11px;color:var(--green-mint);">Berkurang seketika setiap kasir mencetak struk</div>
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                                <span class="status-badge" style="background:var(--amber-bg);color:var(--amber-400);border:1px solid var(--amber-border);">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> Menipis: <b id="dash-rt-menipis">0</b>
+                                </span>
+                                <span class="status-badge" style="background:var(--red-bg);color:var(--red-400);border:1px solid var(--red-border);">
+                                    <i class="fa-solid fa-circle-xmark"></i> Habis: <b id="dash-rt-habis">0</b>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Akses Cepat Menu Konsinyasi -->
+                <div style="margin-top:10px;">
+                    <div style="font-size:11px;font-weight:800;color:var(--gray-400);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">
+                        Akses Cepat Fitur POS Mitra
+                    </div>
+                    <div class="dash-shortcuts-grid">
+                        <div class="dash-shortcut-card" onclick="switchTab('input')">
+                            <div class="dash-widget-icon" style="background:rgba(34,197,94,0.15);color:var(--green-accent);">
+                                <i class="fa-solid fa-boxes-stacked"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:13px;font-weight:800;color:#fff;">Input Stok Pagi</div>
+                                <div style="font-size:11px;color:var(--gray-400);">Setor titipan baru hari ini</div>
+                            </div>
+                        </div>
+                        <div class="dash-shortcut-card" onclick="switchTab('laporan')">
+                            <div class="dash-widget-icon" style="background:rgba(56,189,248,0.15);color:var(--blue-400);">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:13px;font-weight:800;color:#fff;">Laporan Closing POS</div>
+                                <div style="font-size:11px;color:var(--gray-400);">Rekap terjual & unduh CSV</div>
+                            </div>
+                        </div>
+                        <div class="dash-shortcut-card" onclick="switchTab('realtime')">
+                            <div class="dash-widget-icon" style="background:rgba(245,158,11,0.15);color:var(--amber-400);">
+                                <i class="fa-solid fa-store"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:13px;font-weight:800;color:#fff;">Stok di Kasir</div>
+                                <div style="font-size:11px;color:var(--gray-400);">Cek stok menipis & habis</div>
+                            </div>
+                        </div>
+                        <div class="dash-shortcut-card" onclick="switchTab('riwayat')">
+                            <div class="dash-widget-icon" style="background:rgba(168,85,247,0.15);color:#c084fc;">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:13px;font-weight:800;color:#fff;">Riwayat 30 Hari</div>
+                                <div style="font-size:11px;color:var(--gray-400);">Arsip histori & tagihan</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /panel-dashboard -->
 
             <!-- PRE-ORDER ALERT CONTAINER -->
             <div id="bulk-alerts"></div>
 
             <!-- ─── 1. TAB INPUT STOK ─── -->
-            <div id="panel-input" class="tab-panel active">
+            <div id="panel-input" class="tab-panel">
 
             <!-- Banner Kunci (Submit Mitra) -->
             <div id="input-lock-banner" style="display:none;align-items:flex-start;gap:12px;background:var(--amber-bg);border:1.5px solid var(--amber-border);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;">
@@ -1261,20 +1506,35 @@
         </div><!-- /content -->
     </div><!-- /main-wrapper -->
 
-    <!-- ─── MOBILE BOTTOM NAV (TAMPIL DI SMARTPHONE) ─── -->
+    <!-- ─── MOBILE BOTTOM NAV (5 ITEMS DENGAN TOMBOL INPUT STOK DI TENGAH) ─── -->
     <nav class="mobile-bottom-nav">
-        <button class="mobile-nav-item active" onclick="switchTab('input')" id="mob-tab-input">
-            <i class="fa-solid fa-boxes-stacked"></i>
-            <span>Input Stok</span>
+        <!-- 1. Dashboard (Kiri 1) -->
+        <button class="mobile-nav-item active" onclick="switchTab('dashboard')" id="mob-tab-dashboard">
+            <i class="fa-solid fa-gauge-high"></i>
+            <span>Dashboard</span>
         </button>
+
+        <!-- 2. Laporan POS (Kiri 2) -->
         <button class="mobile-nav-item" onclick="switchTab('laporan')" id="mob-tab-laporan">
             <i class="fa-solid fa-chart-line"></i>
-            <span>Laporan POS</span>
+            <span>Laporan</span>
         </button>
+
+        <!-- 3. INPUT STOK (TENGAH / ELEVATED CENTER ACTION BUTTON) -->
+        <button class="mobile-nav-center" onclick="switchTab('input')" id="mob-tab-input" title="Input Stok Pagi">
+            <div class="center-btn-bubble">
+                <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+            <span class="center-btn-label">Input Stok</span>
+        </button>
+
+        <!-- 4. Stok Kasir (Kanan 1) -->
         <button class="mobile-nav-item" onclick="switchTab('realtime')" id="mob-tab-realtime">
             <i class="fa-solid fa-store"></i>
             <span>Stok Kasir</span>
         </button>
+
+        <!-- 5. Riwayat Closing (Kanan 2) -->
         <button class="mobile-nav-item" onclick="switchTab('riwayat')" id="mob-tab-riwayat">
             <i class="fa-solid fa-clock-rotate-left"></i>
             <span>Riwayat</span>
@@ -1474,7 +1734,8 @@ async function initApp() {
     updateDateDisplay();
     updateGreetingCard();
 
-    await renderFormInput();
+    // Default ke Dashboard
+    switchTab('dashboard');
     await cekStatusHariIni();
     setupAdminMenuSync();
     fetchPreOrders();
@@ -1493,26 +1754,30 @@ async function gantiTanggal() {
     selectedDate = document.getElementById('tanggal-filter').value;
     updateDateDisplay();
     updateGreetingCard();
-    await renderFormInput();
     await cekStatusHariIni();
     const activeTab = document.querySelector('.sidebar-nav-item.active')?.id?.replace('side-tab-', '') ||
-                      document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '') || 'input';
+                      document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '') ||
+                      (document.querySelector('.mobile-nav-center.active') ? 'input' : 'dashboard');
+    if (activeTab === 'dashboard') await loadDashboardData();
+    if (activeTab === 'input') await renderFormInput();
     if (activeTab === 'laporan') await loadLaporan();
     if (activeTab === 'riwayat') await fetchRiwayat();
+    if (activeTab === 'realtime') await loadRealtimeStok();
 }
 
 /* ────────────────────────────────────────────────
-   TAB SWITCHER (Sidebar Desktop & Bottom Nav Mobile)
+   TAB SWITCHER (Dashboard, Input di Tengah, Laporan, Stok, Riwayat)
 ──────────────────────────────────────────────── */
 function switchTab(tab) {
     const titles = {
+        dashboard: 'Dashboard Mitra',
         input: 'Input Stok Pagi',
         laporan: 'Laporan POS',
         realtime: 'Stok di Kasir',
         riwayat: 'Riwayat Closing'
     };
 
-    ['input', 'laporan', 'realtime', 'riwayat'].forEach(t => {
+    ['dashboard', 'input', 'laporan', 'realtime', 'riwayat'].forEach(t => {
         const sideEl  = document.getElementById(`side-tab-${t}`);
         const mobItem = document.getElementById(`mob-tab-${t}`);
         const panelEl = document.getElementById(`panel-${t}`);
@@ -1529,6 +1794,8 @@ function switchTab(tab) {
     const barTotal = document.getElementById('floating-total-bar');
     if (barTotal && tab !== 'laporan') barTotal.style.display = 'none';
 
+    if (tab === 'dashboard') loadDashboardData();
+    if (tab === 'input') renderFormInput();
     if (tab === 'laporan') loadLaporan();
     if (tab === 'riwayat') fetchRiwayat();
     if (tab === 'realtime') loadRealtimeStok();
@@ -1537,6 +1804,101 @@ function switchTab(tab) {
     const openedMobTab  = document.getElementById('mob-tab-' + tab);
     if (openedSideTab) openedSideTab.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
     if (openedMobTab)  openedMobTab.querySelectorAll('.admin-sync-dot').forEach(d => d.remove());
+}
+
+/* ────────────────────────────────────────────────
+   0. DASHBOARD DATA LOADER — RINGKASAN PERFORMA MITRA
+──────────────────────────────────────────────── */
+async function loadDashboardData() {
+    updateGreetingCard();
+    if (!mitraData || !mitraData.wa) return;
+
+    // 1. Ambil data konsinyasi stok hari ini
+    const { data: row } = await sb
+        .from('konsinyasi_stok')
+        .select('*')
+        .eq('mitra_wa', mitraData.wa)
+        .eq('tanggal', selectedDate)
+        .maybeSingle();
+
+    let totMasuk = 0, totRetur = 0, totTerjual = 0, totHak = 0;
+    const detail = row?.detail || [];
+    detail.forEach(d => {
+        const m = parseInt(d.stok_masuk) || 0;
+        const r = parseInt(d.retur) || 0;
+        const t = Math.max(0, m - r);
+        const h = d.harga_beli || 0;
+        totMasuk += m;
+        totRetur += r;
+        totTerjual += t;
+        totHak += t * h;
+    });
+
+    const dMasuk   = document.getElementById('dash-stat-masuk');
+    const dRetur   = document.getElementById('dash-stat-retur');
+    const dTerjual = document.getElementById('dash-stat-terjual');
+    const dHak     = document.getElementById('dash-stat-hak');
+
+    if (dMasuk)   dMasuk.textContent   = totMasuk + ' pcs';
+    if (dRetur)   dRetur.textContent   = totRetur + ' pcs';
+    if (dTerjual) dTerjual.textContent = totTerjual + ' pcs';
+    if (dHak)     dHak.textContent     = formatRp(totHak);
+
+    // 2. Banner status stok di dashboard
+    const bannerBox = document.getElementById('dash-stok-banner');
+    if (bannerBox) {
+        if (!row || detail.length === 0) {
+            bannerBox.innerHTML = `
+                <div style="background:var(--amber-bg);border:1.5px solid var(--amber-border);border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <i class="fa-solid fa-triangle-exclamation" style="color:var(--amber-400);font-size:22px;"></i>
+                        <div>
+                            <div style="font-size:13px;font-weight:800;color:#fff;">Belum Ada Input Stok Titipan Hari Ini</div>
+                            <div style="font-size:11px;color:var(--amber-400);margin-top:2px;">Segera masukkan stok pagi agar kasir POS bisa langsung menjual produk Anda.</div>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('input')" class="btn btn-sm" style="background:var(--amber-500);color:#000;font-weight:800;">
+                        <i class="fa-solid fa-boxes-stacked"></i> Input Stok Sekarang
+                    </button>
+                </div>`;
+        } else {
+            const isLocked = !row.edit_unlocked;
+            bannerBox.innerHTML = `
+                <div style="background:rgba(34,197,94,0.12);border:1.5px solid var(--border-glow);border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <i class="fa-solid fa-circle-check" style="color:var(--green-accent);font-size:22px;"></i>
+                        <div>
+                            <div style="font-size:13px;font-weight:800;color:#fff;">Stok Hari Ini Sudah Disubmit & Sinkron ke Kasir</div>
+                            <div style="font-size:11px;color:var(--green-mint);margin-top:2px;">Total ${totMasuk} pcs dari ${detail.length} produk konsinyasi aktif. ${isLocked ? '(Data Terkunci)' : '(Kunci Dibuka Admin)'}</div>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('input')" class="btn btn-ghost btn-sm">
+                        <i class="fa-solid fa-eye"></i> Periksa Stok Masuk
+                    </button>
+                </div>`;
+        }
+    }
+
+    // 3. Quick monitoring sisa fisik kasir
+    const { data: menuList } = await sb
+        .from('menu')
+        .select('id, stok')
+        .eq('mitra_wa', mitraData.wa);
+
+    let rtTotal = 0, rtMenipis = 0, rtHabis = 0;
+    (menuList || []).forEach(m => {
+        const s = parseInt(m.stok) || 0;
+        rtTotal += s;
+        if (s === 0) rtHabis++;
+        else if (s <= 5) rtMenipis++;
+    });
+
+    const dRtTotal   = document.getElementById('dash-rt-total');
+    const dRtMenipis = document.getElementById('dash-rt-menipis');
+    const dRtHabis   = document.getElementById('dash-rt-habis');
+    if (dRtTotal)   dRtTotal.textContent   = rtTotal;
+    if (dRtMenipis) dRtMenipis.textContent = rtMenipis;
+    if (dRtHabis)   dRtHabis.textContent   = rtHabis;
 }
 
 /* ────────────────────────────────────────────────
@@ -2106,13 +2468,17 @@ function setupAdminMenuSync() {
             if (payload.new && payload.new.mitra_wa === mitraData.wa && payload.new.tanggal === selectedDate) {
                 cekStatusHariIni();
                 const activeTab = document.querySelector('.sidebar-nav-item.active')?.id?.replace('side-tab-', '') ||
-                                  document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '');
+                                  document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '') ||
+                                  (document.querySelector('.mobile-nav-center.active') ? 'input' : 'dashboard');
+                if (activeTab === 'dashboard') loadDashboardData();
                 if (activeTab === 'laporan') loadLaporan();
             }
         })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'menu' }, () => {
             const activeTab = document.querySelector('.sidebar-nav-item.active')?.id?.replace('side-tab-', '') ||
-                              document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '');
+                              document.querySelector('.mobile-nav-item.active')?.id?.replace('mob-tab-', '') ||
+                              (document.querySelector('.mobile-nav-center.active') ? 'input' : 'dashboard');
+            if (activeTab === 'dashboard') loadDashboardData();
             if (activeTab === 'realtime') loadRealtimeStok();
         })
         .subscribe();
